@@ -1,23 +1,30 @@
-NAME = minishell 
+NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
-SRCS = main.c welcome.c ft_split.c check_command.c ft_strlen.c ft_strlcat.c
+CFLAGS = -Wall -Wextra -Werror -I. -Itokenizer -Ilibft -Ienviroment
 
+LIBFT = libft/libft.a
+
+SRCS = main.c tokenizer/token.c enviroment/enviroment.c enviroment/env_utilis.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $@
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(LIBFT):
+	$(MAKE) -C libft
+
 clean:
 	rm -rf $(OBJS)
+	$(MAKE) -C libft clean
 
 fclean : clean
 	rm -rf $(NAME)
+	$(MAKE) -C libft fclean
 
 re: fclean all
 
