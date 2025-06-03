@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:07:20 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/05/30 18:43:32 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/03 18:50:53 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,58 +37,71 @@ int	ft_recogn_t(char *line)
 	return (TOKEN_WORD);
 }
 
-int	ft_nr_token(char *line)
+t_token	*ft_new_token_node(void)
 {
-	int				nr_token;
-	t_token_type	type;
-	char			quote;
+	t_token	*new;
 
-	nr_token = 0;
-	while (*line)
-	{
-		while (*line == ' ' || *line == '\t')
-			line++;
-		if (!*line)
-			break ;
-		type = ft_recogn_t(line);
-		if (type == TOKEN_DQUOTE || type == TOKEN_SQUOTE)
-		{
-			quote = *line++;
-			while (*line && *line != quote)
-				line++;
-			if (*line == quote)
-				line++ ;
-			nr_token++;
-		}
-		else if (type == TOKEN_HEREDOC || type == TOKEN_APPEND)
-		{
-			line += 2;
-			nr_token++;
-		}
-		else if (type == TOKEN_REDIRECT_IN ||
-			type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
-		{
-			line++;
-			nr_token++;
-		}
-				else
-		{
-			while (*line && !*line == ' ' &&
-				ft_recogn_t(line) == TOKEN_WORD)
-			{
-				if (*line == '\'' || *line == '\"')
-				{
-					quote = *line++;
-					while (*line && *line != quote)
-						line++;
-					if (*line == quote)
-						line++;
-				}
-				else
-					line++;
-			}
-			nr_token++;
-		}
-	}
-	return (nr_token);
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->value = NULL;
+	new->type = -1;
+	new->next = NULL;
+	return (new);
 }
+
+// int	ft_nr_token(char *line)
+// {
+// 	int				nr_token;
+// 	t_token_type	type;
+// 	char			quote;
+
+// 	nr_token = 0;
+// 	while (*line)
+// 	{
+// 		while (*line == ' ' || *line == '\t')
+// 			line++;
+// 		if (!*line)
+// 			break ;
+// 		type = ft_recogn_t(line);
+// 		if (type == TOKEN_DQUOTE || type == TOKEN_SQUOTE)
+// 		{
+// 			quote = *line++;
+// 			while (*line && *line != quote)
+// 				line++;
+// 			if (*line == quote)
+// 				line++ ;
+// 			nr_token++;
+// 		}
+// 		else if (type == TOKEN_HEREDOC || type == TOKEN_APPEND)
+// 		{
+// 			line += 2;
+// 			nr_token++;
+// 		}
+// 		else if (type == TOKEN_REDIRECT_IN ||
+// 			type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
+// 		{
+// 			line++;
+// 			nr_token++;
+// 		}
+// 		else
+// 		{
+// 			while (*line && *line != ' ' &&
+// 				ft_recogn_t(line) != TOKEN_WORD)
+// 			{
+// 				if (*line == '\'' || *line == '\"')
+// 				{
+// 					quote = *line++;
+// 					while (*line && *line != quote)
+// 						line++;
+// 					if (*line == quote)
+// 						line++;
+// 				}
+// 				else
+// 					line++;
+// 			}
+// 			nr_token++;
+// 		}
+// 	}
+// 	return (nr_token);
+// }

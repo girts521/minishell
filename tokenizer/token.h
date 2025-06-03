@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:11:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/05/30 18:43:43 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/03 18:51:14 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ typedef struct s_token {
 } t_token;
 
 /*tokenizer.c*/
-
+/*token.c*/
+void	ft_populate_token_list(t_token *token, char *line);
 /*token_utils.c*/
-int	ft_recogn_t(char *line);
-int	ft_nr_token(char *line);
+int		ft_recogn_t(char *line);
+t_token	*ft_new_token_node(void);
 
 #endif
