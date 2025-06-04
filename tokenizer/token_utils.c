@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:07:20 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/03 18:50:53 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:14:45 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,71 +37,135 @@ int	ft_recogn_t(char *line)
 	return (TOKEN_WORD);
 }
 
-t_token	*ft_new_token_node(void)
+int	ft_sdquote(t_token **token, char *line, t_token_type type)
 {
-	t_token	*new;
+	char	quote;
+	int		i;
 
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->value = NULL;
-	new->type = -1;
-	new->next = NULL;
-	return (new);
+	i = 0;
+	quote = line[i++];
+	(*token)->value = ft_strdup_ch(line + i, quote);
+	if (!(*token)->value)
+		return (-1);
+	while (line[i] && line[i] != quote)
+		i++;
+	if (line[i] == quote)
+		i++;
+	(*token)->type = type;
+	(*token)->next = ft_new_token_node();
+	if (!(*token)->next)
+		return (-1);
+	(*token) = (*token)->next;
+	return (i);
 }
 
-// int	ft_nr_token(char *line)
-// {
-// 	int				nr_token;
-// 	t_token_type	type;
-// 	char			quote;
+int	ft_here_app(t_token **token, char *line, t_token_type type)
+{
+	int	i;
 
-// 	nr_token = 0;
-// 	while (*line)
-// 	{
-// 		while (*line == ' ' || *line == '\t')
-// 			line++;
-// 		if (!*line)
-// 			break ;
-// 		type = ft_recogn_t(line);
-// 		if (type == TOKEN_DQUOTE || type == TOKEN_SQUOTE)
-// 		{
-// 			quote = *line++;
-// 			while (*line && *line != quote)
-// 				line++;
-// 			if (*line == quote)
-// 				line++ ;
-// 			nr_token++;
-// 		}
-// 		else if (type == TOKEN_HEREDOC || type == TOKEN_APPEND)
-// 		{
-// 			line += 2;
-// 			nr_token++;
-// 		}
-// 		else if (type == TOKEN_REDIRECT_IN ||
-// 			type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
-// 		{
-// 			line++;
-// 			nr_token++;
-// 		}
-// 		else
-// 		{
-// 			while (*line && *line != ' ' &&
-// 				ft_recogn_t(line) != TOKEN_WORD)
-// 			{
-// 				if (*line == '\'' || *line == '\"')
-// 				{
-// 					quote = *line++;
-// 					while (*line && *line != quote)
-// 						line++;
-// 					if (*line == quote)
-// 						line++;
-// 				}
-// 				else
-// 					line++;
-// 			}
-// 			nr_token++;
-// 		}
-// 	}
-// 	return (nr_token);
-// }
+	i = 0;
+	(*token)->value = ft_strndup(line, 2);
+	if (!(*token)->value)
+		return (-1);
+	i += 2;
+	(*token)->type = type;
+	(*token)->next = ft_new_token_node();
+	if (!(*token)->next)
+		return (-1);
+	(*token) = (*token)->next;
+	return (i);
+}
+
+int	ft_redir_pipe(t_token **token, char *line, t_token_type type)
+{
+	int	i;
+
+	i = 0;
+	(*token)->value = ft_strndup(line, 1);
+	if (!(*token)->value)
+		return (-1);
+	i += 1;
+	(*token)->type = type;
+	(*token)->next = ft_new_token_node();
+	if (!(*token)->next)
+		return (-1);
+	(*token) = (*token)->next;
+	return (i);
+}
+
+int	ft_word(t_token **token, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0' && line[i] != ' ' && line[i] != '\t' &&
+		ft_recogn_t(line) == TOKEN_WORD)
+		i++;
+	(*token)->value = ft_strndup(line, i);
+	if (!(*token)->value)
+		return (-1);
+	(*token)->type = TOKEN_WORD;
+	(*token)->next = ft_new_token_node();
+	if (!(*token)->next)
+		return (-1);
+	(*token) = (*token)->next;
+	return (i);
+}
+
+/*
+int	ft_nr_token(char *line)
+{
+	int				nr_token;
+	t_token_type	type;
+	char			quote;
+
+	nr_token = 0;
+	while (*line)
+	{
+		while (*line == ' ' || *line == '\t')
+			line++;
+		if (!*line)
+			break ;
+		type = ft_recogn_t(line);
+		if (type == TOKEN_DQUOTE || type == TOKEN_SQUOTE)
+		{
+			quote = *line++;
+			while (*line && *line != quote)
+				line++;
+			if (*line == quote)
+				line++ ;
+			nr_token++;
+		}
+		else if (type == TOKEN_HEREDOC || type == TOKEN_APPEND)
+		{
+			line += 2;
+			nr_token++;
+		}
+		else if (type == TOKEN_REDIRECT_IN ||
+			type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
+		{
+			line++;
+			nr_token++;
+		}
+		else
+		{
+			while (*line && *line != ' ' &&
+				ft_recogn_t(line) != TOKEN_WORD)
+			{
+				if (*line == '\'' || *line == '\"')
+				{
+					quote = *line++;
+					while (*line && *line != quote)
+						line++;
+					if (*line == quote)
+						line++;
+				}
+				else
+					line++;
+			}
+			nr_token++;
+		}
+	}
+	return (nr_token);
+}
+*/

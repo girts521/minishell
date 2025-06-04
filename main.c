@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:23:06 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/03 18:49:25 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:22:10 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv, char **envp)
 	env = ft_init_env(envp);
 	//ft_print_env_list(*env);
 	token_list = ft_new_token_node();
-	ft_populate_token_list(token_list, "ciao sono | <<   >  < 'io' >> ");
+	ft_populate_token_list(token_list, "ls \\| grep txt");
 	ft_print_token_list(token_list);
 	return (0);
 }

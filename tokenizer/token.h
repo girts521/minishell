@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:11:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/03 18:51:14 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:34:01 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,17 @@ typedef struct s_token {
 	struct s_token	*next;	// Next token in the list
 } t_token;
 
-/*tokenizer.c*/
 /*token.c*/
+t_token	*ft_new_token_node(void);
+int		ft_select_token(t_token **token, char *line, t_token_type type);
 void	ft_populate_token_list(t_token *token, char *line);
 /*token_utils.c*/
 int		ft_recogn_t(char *line);
-t_token	*ft_new_token_node(void);
+int		ft_sdquote(t_token **token, char *line, t_token_type type);
+int		ft_here_app(t_token **token, char *line, t_token_type type);
+int		ft_redir_pipe(t_token **token, char *line, t_token_type type);
+int		ft_word(t_token **token, char *line);
+/*free_token_list.c*/
+void	ft_free_token_list(t_token *token);
 
 #endif
