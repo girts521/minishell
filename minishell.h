@@ -32,14 +32,14 @@ typedef enum e_redirection_type
 
 typedef struct	s_pipe_node 
 {
-	e_ast_node_type type;
+	t_ast_node_type type;
 	// TODO;
 
 } t_pipe_node;
 
 typedef struct s_command_node
 {
-	e_ast_node_type type;
+	t_ast_node_type type;
 	char *value;
 	char **args;
 	t_redirection_type redirection;
@@ -54,10 +54,9 @@ typedef union u_ast_node
 
 typedef struct s_ast
 {
-	e_ast_node_type type;	
-	t_ast_node *left;
-	t_ast_node *right;
-
+	t_ast_node_type type;	
+	struct s_ast *left;
+	struct s_ast *right;
 	t_ast_node data;
  } t_ast;
 
