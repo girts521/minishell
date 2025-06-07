@@ -42,6 +42,7 @@ typedef struct s_command_node
 	t_ast_node_type type;
 	char *value;
 	char **args;
+	int argc;
 	t_redirection_type redirection;
 
 } t_command_node;
