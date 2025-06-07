@@ -42,9 +42,10 @@ typedef struct s_command_node
 	t_ast_node_type type;
 	char *value;
 	char **args;
-	int argc;
-	t_redirection_type redirection;
-	char *redir_dest;
+	long argc;
+	long redirc;
+	t_redirection_type *redirection;
+	char **redir_dest;
 
 } t_command_node;
 
@@ -75,3 +76,8 @@ void print_token_list(t_token *token_list);
 void print_token_list(t_token *token_list); 
 t_token *get_test_input_1_tokens();
 t_token *get_test_input_2_tokens();
+t_token *get_test_input_3_tokens();
+t_token *get_test_input_4_tokens();
+t_token *get_test_input_5_tokens();
+t_token *get_test_input_6_tokens();
+t_token *get_test_input_7_tokens();

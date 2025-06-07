@@ -38,8 +38,8 @@ t_token *get_test_input_1_tokens() {
     t_token *head = create_token(TOKEN_WORD, "ls");
     head->next = create_token(TOKEN_WORD, "-l");
     head->next->next = create_token(TOKEN_WORD, "/tmp");
-    head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
-    head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
+    // head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+    head->next->next->next = create_token(TOKEN_WORD, "test.txt");
     return head;
 }
 
