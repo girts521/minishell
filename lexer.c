@@ -38,8 +38,8 @@ t_token *get_test_input_1_tokens() {
     t_token *head = create_token(TOKEN_WORD, "ls");
     head->next = create_token(TOKEN_WORD, "-l");
     head->next->next = create_token(TOKEN_WORD, "/tmp");
-    // head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
-    head->next->next->next = create_token(TOKEN_WORD, "test.txt");
+    head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+    head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
     return head;
 }
 
@@ -159,6 +159,66 @@ t_token *get_test_input_7_tokens() {
     t_token *head = create_token(TOKEN_WORD, "echo");
     head->next = create_token(TOKEN_STRING, "\"Status was: $?\"");
     head->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// --- New, More Complex Test Cases ---
+
+/**
+ * @brief Test Input 8: < infile grep "test" | wc -l > outfile
+ * @purpose Tests redirections on both the first and last commands of a pipeline.
+ * It ensures that '< infile' is associated with 'grep' and '> outfile' with 'wc'.
+ * Note: Placing input redirection before the command is valid in bash.
+ */
+t_token *get_test_input_8_tokens() {
+    t_token *head = create_token(TOKEN_REDIRECT_IN, "<");
+    head->next = create_token(TOKEN_WORD, "infile");
+    head->next->next = create_token(TOKEN_WORD, "grep");
+    head->next->next->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next->next->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next->next->next = create_token(TOKEN_WORD, "wc");
+    head->next->next->next->next->next->next = create_token(TOKEN_WORD, "-l");
+    head->next->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+    head->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
+    head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+/**
+ * @brief Test Input 9: ls -l | grep ".c" | sort -r | cat -e
+ * @purpose Tests a longer pipeline with multiple pipes to ensure the
+ * AST is built correctly as a linked series of pipe nodes.
+ */
+t_token *get_test_input_9_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "ls");
+    head->next = create_token(TOKEN_WORD, "-l");
+    head->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next = create_token(TOKEN_WORD, "grep");
+    head->next->next->next->next = create_token(TOKEN_STRING, "\".c\"");
+    head->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next->next->next->next = create_token(TOKEN_WORD, "sort");
+    head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-r");
+    head->next->next->next->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "cat");
+    head->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-e");
+    head->next->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+/**
+ * @brief Test Input 10: cat << END | grep "keyword" >> log.txt
+ * @purpose Tests a pipeline that starts with a heredoc and ends with an append redirection.
+ */
+t_token *get_test_input_10_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "cat");
+    head->next = create_token(TOKEN_HEREDOC, "<<");
+    head->next->next = create_token(TOKEN_WORD, "END");
+    head->next->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next->next = create_token(TOKEN_WORD, "grep");
+    head->next->next->next->next->next = create_token(TOKEN_STRING, "\"keyword\"");
+    head->next->next->next->next->next->next = create_token(TOKEN_APPEND, ">>");
+    head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "log.txt");
+    head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
 

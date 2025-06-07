@@ -3,6 +3,29 @@
 #include <stdlib.h>
 #include "minishell.h"
 
+// TODO:
+// Handle Quotes: Strip the outer single (') and double (") quotes from token values before saving them to the AST.
+// Implement Syntax Error Handling:
+// Detect and report errors for missing redirection targets (e.g., ls > | wc).
+// Detect and report errors for unexpected operators at the start of a command or repeated operators (e.g., | ls).
+// Refine Parser Logic:
+// Improve the argument counting and storage to more cleanly separate the main command from its arguments.
+// Ensure inputs with only redirections (e.g., > outfile) are parsed correctly without crashing.
+//
+void	*safe_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+
+	ptr = ft_calloc(count, size);
+	if (!ptr)
+	{
+		// You can use a standard error message or your clean_exit function
+		ft_putstr_fd("Error: Memory allocation failed!\n", 2); // Write to STDERR
+		exit(EXIT_FAILURE);
+	}
+	return (ptr);
+}
+
 void clean_exit(char *error)
 {
 	//TODO
@@ -28,6 +51,7 @@ long count_redirs(t_token *token)
 {
 	long result;
 
+	result = 0;
 	while (token && token->type != TOKEN_PIPE)
 	{
 		if (token->type >= 4 && token->type <= 7)
@@ -48,8 +72,8 @@ void handle_redirect(t_token *token, t_ast *current_node)
 	{
 		command_node->redirc = 0;
 		redirs_num = count_redirs(token);
-		command_node->redirection = (t_redirection_type *)malloc(redirs_num * sizeof(t_redirection_type *));
-		command_node->redir_dest = (char **)malloc(redirs_num * sizeof(char *));
+		command_node->redirection = (t_redirection_type *)safe_calloc(1, redirs_num * sizeof(t_redirection_type *));
+		command_node->redir_dest = (char **)safe_calloc(1, redirs_num * sizeof(char *));
 	}
 
 	if (token->type == TOKEN_REDIRECT_IN)
@@ -82,7 +106,7 @@ void handle_command(t_token *token, t_ast *current_node)
 	else
 	{
 		command_node->value = token->value;
-		command_node->args = (char **)malloc(count_args(token));
+		command_node->args = (char **)safe_calloc(1, count_args(token));
 	}
 
 }
@@ -92,9 +116,7 @@ t_ast *create_ast_node(void)
 {
 	t_ast *node;
 
-	node = (t_ast *)malloc(sizeof(t_ast));
-	if (!node)
-		clean_exit("Failed to allocate memory for a node!\n");
+	node = (t_ast *)safe_calloc(1, sizeof(t_ast));
 	node->type = COMMAND_NODE;
 	node->left = NULL;
 	node->right = NULL;
@@ -118,11 +140,12 @@ int main (void)
 	root = current_node;
 // Test Input 4: grep "error" < log.txt >> errors.log
     printf("Generating Test Input 4 grep 'error' < log.txt >> errors.log):\n");
-    t_token *tokens1 = get_test_input_6_tokens();
+    t_token *tokens1 = get_test_input_10_tokens();
    	// print_token_list(tokens1);
 	
 	while (tokens1)
 	{
+		printf("%s", tokens1->value);
 		if (tokens1->type >= 0 && tokens1->type <= 2)
 			handle_command(tokens1, current_node);
 		if (tokens1->type > 3 && tokens1->type < 8)
@@ -139,7 +162,7 @@ int main (void)
 			pipe_node->type = PIPE_NODE;
 			pipe_node->data.pipe_node.type = PIPE_NODE;
 			//add root as the left side of the pipe 
-			pipe_node->right = root;
+			pipe_node->left = root;
 			//update the root to be the pipe node 
 			root = pipe_node;
 			// create a new node 
@@ -150,6 +173,7 @@ int main (void)
 		}
 		tokens1 = tokens1->next;
 	}
+	printf("\n");
 	print_ast(root);
 	// printf("here\n");
 	// while (root)
