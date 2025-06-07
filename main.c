@@ -112,12 +112,13 @@ int main (void)
 {
 	t_ast *current_node;
 	t_ast *root;
+	t_ast *pipe_node;
 
 	current_node = create_ast_node();
 	root = current_node;
 // Test Input 4: grep "error" < log.txt >> errors.log
     printf("Generating Test Input 4 grep 'error' < log.txt >> errors.log):\n");
-    t_token *tokens1 = get_test_input_7_tokens();
+    t_token *tokens1 = get_test_input_6_tokens();
    	// print_token_list(tokens1);
 	
 	while (tokens1)
@@ -130,21 +131,45 @@ int main (void)
 			if (tokens1->next)
 				tokens1 = tokens1->next;
 		}
+		if (tokens1->type == TOKEN_PIPE)
+		{
+			//Create a new empty t_ast node
+			pipe_node = create_ast_node();
+			//Add the necessary pipe info \to it 
+			pipe_node->type = PIPE_NODE;
+			pipe_node->data.pipe_node.type = PIPE_NODE;
+			//add root as the left side of the pipe 
+			pipe_node->right = root;
+			//update the root to be the pipe node 
+			root = pipe_node;
+			// create a new node 
+			// assign it to the right of the pipe 
+			pipe_node->right = create_ast_node();
+			// update the current node to be the right side of pipe 
+			current_node = pipe_node->right;
+		}
 		tokens1 = tokens1->next;
 	}
-	while (root)
-	{
-		printf("%s\n", root->data.command_node.value);
-		int i = 0;
-		while (i < root->data.command_node.argc) {
-			printf("arg: %s\n", root->data.command_node.args[i]);
-			i++;
-		}
-		printf("redir type: %d\n redir dest: %s\n", root->data.command_node.redirection[0], root->data.command_node.redir_dest[0]);
-		printf("redir type2: %d\n redir dest2: %s\n", root->data.command_node.redirection[1], root->data.command_node.redir_dest[1]);
-		root = root->left;
-	
-	}
+	print_ast(root);
+	// printf("here\n");
+	// while (root)
+	// {
+	// 	if (root->type == PIPE_NODE)
+	// 	{
+	// 		printf("PIPE\n");
+	// 		root = root->left;
+	// 	}
+	// 	printf("%s\n", root->data.command_node.value);
+	// 	int i = 0;
+	// 	while (i < root->data.command_node.argc) {
+	// 		printf("arg: %s\n", root->data.command_node.args[i]);
+	// 		i++;
+	// 	}
+	// 	printf("redir type: %d\n redir dest: %s\n", root->data.command_node.redirection[0], root->data.command_node.redir_dest[0]);
+	// 	printf("redir type2: %d\n redir dest2: %s\n", root->data.command_node.redirection[1], root->data.command_node.redir_dest[1]);
+	// 	root = root->left;
+	//
+	// }
 
     free_token_list(tokens1); // Clean up
 	return 1;

@@ -1,7 +1,7 @@
 NAME = minishell 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror 
-SRCS = main.c lexer.c
+SRCS = main.c lexer.c print_ast.c
 OBJS := $(SRCS:.c=.o)
 
 LIBFT_DIR = libft

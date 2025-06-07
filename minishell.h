@@ -81,3 +81,4 @@ t_token *get_test_input_4_tokens();
 t_token *get_test_input_5_tokens();
 t_token *get_test_input_6_tokens();
 t_token *get_test_input_7_tokens();
+void print_ast(t_ast *root);
