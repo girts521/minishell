@@ -25,7 +25,17 @@ long count_args(t_token *token)
 
 void handle_redirect(t_token *token, t_ast *current_node)
 {
-	
+	t_command_node *command_node;
+
+	command_node = &current_node->data.command_node;
+	if (token->type == TOKEN_REDIRECT_IN)
+		command_node->redirection = REDIR_IN;
+	else if (token->type == TOKEN_REDIRECT_OUT)
+		command_node->redirection = REDIR_OUT;	
+	else if (token->type == TOKEN_APPEND)
+		command_node->redirection = REDIR_APPEND;
+	if (token->next)
+		command_node->redir_dest = token->next->value;
 }
 
 
@@ -49,8 +59,6 @@ void handle_command(t_token *token, t_ast *current_node)
 		command_node->value = token->value;
 		command_node->args = (char **)malloc(count_args(token));
 	}
-	command_node->redirection = REDIR_NONE;
-
 
 }
 
@@ -82,7 +90,7 @@ int main (void)
 
 	current_node = create_ast_node();
 	root = current_node;
-    printf("Generating Test Input 1 (ls -l /tmp >):\n");
+    printf("Generating Test Input 1 (ls -l /tmp > text):\n");
     t_token *tokens1 = get_test_input_1_tokens();
    	// print_token_list(tokens1);
 	
@@ -91,7 +99,11 @@ int main (void)
 		if (tokens1->type == TOKEN_WORD)
 			handle_command(tokens1, current_node);
 		if (tokens1->type > 3 && tokens1->type < 7)
+		{
 			handle_redirect(tokens1, current_node);
+			if (tokens1->next)
+				tokens1 = tokens1->next;
+		}
 		tokens1 = tokens1->next;
 	}
 	while (root) {
@@ -100,8 +112,8 @@ int main (void)
 		while (i < root->data.command_node.argc) {
 			printf("arg: %s\n", root->data.command_node.args[i]);
 			i++;
-		
 		}
+		printf("redir type: %d\n redir dest: %s\n", root->data.command_node.redirection, root->data.command_node.redir_dest);
 		root = root->left;
 	
 	}

@@ -44,6 +44,7 @@ typedef struct s_command_node
 	char **args;
 	int argc;
 	t_redirection_type redirection;
+	char *redir_dest;
 
 } t_command_node;
 

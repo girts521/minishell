@@ -39,6 +39,7 @@ t_token *get_test_input_1_tokens() {
     head->next = create_token(TOKEN_WORD, "-l");
     head->next->next = create_token(TOKEN_WORD, "/tmp");
     head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+    head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
     return head;
 }
 
@@ -53,6 +54,111 @@ t_token *get_test_input_2_tokens() {
     head->next = create_token(TOKEN_STRING, "\"Hello $USER\"");
     head->next->next = create_token(TOKEN_SQUOTE, "'no expansion here'");
     head->next->next->next = create_token(TOKEN_EOF, NULL); // End of the command
+    return head;
+}
+
+// --- Mock Lexer Output Functions ---
+
+// ... (your existing create_token, get_test_input_1_tokens, etc., functions go here) ...
+
+// Test Input 3: cat file.txt | grep "search"
+// Purpose: Tests a simple pipeline with the | operator.
+// Expected Token Sequence:
+// 1. TOKEN_WORD,   value: "cat"
+// 2. TOKEN_WORD,   value: "file.txt"
+// 3. TOKEN_PIPE,   value: "|" (or NULL if your lexer doesn't store values for operators)
+// 4. TOKEN_WORD,   value: "grep"
+// 5. TOKEN_STRING, value: "\"search\""
+// 6. TOKEN_EOF,    value: NULL
+t_token *get_test_input_3_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "cat");
+    head->next = create_token(TOKEN_WORD, "file.txt");
+    head->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next = create_token(TOKEN_WORD, "grep");
+    head->next->next->next->next = create_token(TOKEN_STRING, "\"search\"");
+    head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// Test Input 4: grep "error" < log.txt >> errors.log
+// Purpose: Tests multiple redirections (input and append-output) on a single command.
+// Expected Token Sequence:
+// 1. TOKEN_WORD,         value: "grep"
+// 2. TOKEN_STRING,       value: "\"error\""
+// 3. TOKEN_REDIRECT_IN,  value: "<"
+// 4. TOKEN_WORD,         value: "log.txt"
+// 5. TOKEN_APPEND,       value: ">>"
+// 6. TOKEN_WORD,         value: "errors.log"
+// 7. TOKEN_EOF,          value: NULL
+t_token *get_test_input_4_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "grep");
+    head->next = create_token(TOKEN_STRING, "\"error\"");
+    head->next->next = create_token(TOKEN_REDIRECT_IN, "<");
+    head->next->next->next = create_token(TOKEN_WORD, "log.txt");
+    head->next->next->next->next = create_token(TOKEN_APPEND, ">>");
+    head->next->next->next->next->next = create_token(TOKEN_WORD, "errors.log");
+    head->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// Test Input 5: wc -l <<< END
+// Purpose: Tests the here-document redirection as specified in the subject. 
+// Note: Your subject uses '<<<', while the `e_token_type` enum has TOKEN_HEREDOC,
+// which is commonly associated with '<<'. Ensure your lexer correctly maps '<<<'
+// to TOKEN_HEREDOC to match the project requirements.
+// Expected Token Sequence:
+// 1. TOKEN_WORD,    value: "wc"
+// 2. TOKEN_WORD,    value: "-l"
+// 3. TOKEN_HEREDOC, value: "<<<"
+// 4. TOKEN_WORD,    value: "END" (the delimiter)
+// 5. TOKEN_EOF,     value: NULL
+t_token *get_test_input_5_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "wc");
+    head->next = create_token(TOKEN_WORD, "-l");
+    head->next->next = create_token(TOKEN_HEREDOC, "<<<");
+    head->next->next->next = create_token(TOKEN_WORD, "END");
+    head->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// Test Input 6: cat < infile | grep "test" > outfile
+// Purpose: Tests a more complex chain involving both input/output redirection and a pipe.
+// This checks if your parser correctly associates redirections with the right commands in a pipeline.
+// Expected Token Sequence:
+// 1. TOKEN_WORD,         value: "cat"
+// 2. TOKEN_REDIRECT_IN,  value: "<"
+// 3. TOKEN_WORD,         value: "infile"
+// 4. TOKEN_PIPE,         value: "|"
+// 5. TOKEN_WORD,         value: "grep"
+// 6. TOKEN_STRING,       value: "\"test\""
+// 7. TOKEN_REDIRECT_OUT, value: ">"
+// 8. TOKEN_WORD,         value: "outfile"
+// 9. TOKEN_EOF,          value: NULL
+t_token *get_test_input_6_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "cat");
+    head->next = create_token(TOKEN_REDIRECT_IN, "<");
+    head->next->next = create_token(TOKEN_WORD, "infile");
+    head->next->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next->next = create_token(TOKEN_WORD, "grep");
+    head->next->next->next->next->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+    head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
+    head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// Test Input 7: echo "Status was: $?"
+// Purpose: Tests variable expansion within double quotes, specifically the exit status variable '$?'. 
+// Your parser will need to know not to expand this, but the executor will.
+// For the lexer, it's just a string.
+// Expected Token Sequence:
+// 1. TOKEN_WORD,   value: "echo"
+// 2. TOKEN_STRING, value: "\"Status was: $?\""
+// 3. TOKEN_EOF,    value: NULL
+t_token *get_test_input_7_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "echo");
+    head->next = create_token(TOKEN_STRING, "\"Status was: $?\"");
+    head->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
 
