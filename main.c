@@ -1,5 +1,9 @@
 #include "minishell.h"
 
+//TODO:
+//1. Error management, return if some input is wrong
+//2. Memory management
+
 t_ast	*parser(t_token *tokens)
 {
 	t_ast	*current_node;
