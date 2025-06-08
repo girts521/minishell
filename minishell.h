@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "libft.h"
 
 // Your provided token type definition
 typedef enum e_token_type {
@@ -71,9 +72,18 @@ typedef struct s_token {
     struct s_token *next;   // Next token in the list
 } t_token;
 
+t_ast *create_ast_node(void);
 void free_token_list(t_token *token_list);
 void print_token_list(t_token *token_list);
-void print_token_list(t_token *token_list); 
+void free_ast(void);
+long count_args(t_token *token);
+long count_redirs(t_token *token);
+void handle_redirect(t_token *token, t_ast *current_node);
+void handle_command(t_token *token, t_ast *current_node);
+void	*safe_calloc(size_t count, size_t size);
+void clean_exit(char *error);
+
+//Debug and testing helper functions
 t_token *get_test_input_1_tokens();
 t_token *get_test_input_2_tokens();
 t_token *get_test_input_3_tokens();
