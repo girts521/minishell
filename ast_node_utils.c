@@ -1,37 +1,37 @@
 #include "minishell.h"
 
-long count_args(t_token *token)
+long	count_args(t_token *token)
 {
-	long result;
+	long	result;
 
 	result = 0;
 	while (token && token->type != TOKEN_PIPE)
 	{
 		if (token->type >= 0 && token->type < 3)
-			result++;	
+			result++;
 		token = token->next;
 	}
-	return result * sizeof(char *);
+	return (result * sizeof(char *));
 }
 
-long count_redirs(t_token *token)
+long	count_redirs(t_token *token)
 {
-	long result;
+	long	result;
 
 	result = 0;
 	while (token && token->type != TOKEN_PIPE)
 	{
 		if (token->type >= 4 && token->type <= 7)
-			result++;	
+			result++;
 		token = token->next;
 	}
 	return (result);
 }
 
-void handle_redirect(t_token *token, t_ast *current_node)
+void	handle_redirect(t_token *token, t_ast *current_node)
 {
-	t_command_node *command_node;
-	long redirs_num;
+	t_command_node	*command_node;
+	long			redirs_num;
 
 	redirs_num = 0;
 	command_node = &current_node->data.command_node;
@@ -39,14 +39,15 @@ void handle_redirect(t_token *token, t_ast *current_node)
 	{
 		command_node->redirc = 0;
 		redirs_num = count_redirs(token);
-		command_node->redirection = (t_redirection_type *)safe_calloc(1, redirs_num * sizeof(t_redirection_type *));
-		command_node->redir_dest = (char **)safe_calloc(1, redirs_num * sizeof(char *));
+		command_node->redirection = (t_redirection_type *)safe_calloc \
+						(1, redirs_num * sizeof(t_redirection_type *));
+		command_node->redir_dest = (char **)safe_calloc \
+						(1, redirs_num * sizeof(char *));
 	}
-
 	if (token->type == TOKEN_REDIRECT_IN)
 		command_node->redirection[command_node->redirc] = REDIR_IN;
 	else if (token->type == TOKEN_REDIRECT_OUT)
-		command_node->redirection[command_node->redirc] = REDIR_OUT;	
+		command_node->redirection[command_node->redirc] = REDIR_OUT;
 	else if (token->type == TOKEN_APPEND)
 		command_node->redirection[command_node->redirc] = REDIR_APPEND;
 	else if (token->type == TOKEN_HEREDOC)
@@ -55,16 +56,15 @@ void handle_redirect(t_token *token, t_ast *current_node)
 		command_node->redir_dest[command_node->redirc++] = token->next->value;
 }
 
-
-void handle_command(t_token *token, t_ast *current_node)
+void	handle_command(t_token *token, t_ast *current_node)
 {
-	t_command_node *command_node;
+	t_command_node	*command_node;
 
 	current_node->type = COMMAND_NODE;
 	command_node = &current_node->data.command_node;
 	command_node->type = COMMAND_NODE;
 	if (!command_node->argc)
-		command_node->argc = 0;	
+		command_node->argc = 0;
 	if (command_node->value)
 	{
 		command_node->args[command_node->argc] = token->value;
@@ -75,5 +75,18 @@ void handle_command(t_token *token, t_ast *current_node)
 		command_node->value = token->value;
 		command_node->args = (char **)safe_calloc(1, count_args(token));
 	}
+}
 
+t_ast	*handle_pipe(t_ast **root, t_ast *current_node)
+{
+	t_ast	*pipe_node;
+
+	pipe_node = create_ast_node();
+	pipe_node->type = PIPE_NODE;
+	pipe_node->data.pipe_node.type = PIPE_NODE;
+	pipe_node->left = *root;
+	*root = pipe_node;
+	pipe_node->right = create_ast_node();
+	current_node = pipe_node->right;
+	return (current_node);
 }
