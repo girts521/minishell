@@ -40,6 +40,7 @@ t_token *get_test_input_1_tokens() {
     head->next->next = create_token(TOKEN_WORD, "/tmp");
     head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
     head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
+    head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
 
@@ -219,6 +220,63 @@ t_token *get_test_input_10_tokens() {
     head->next->next->next->next->next->next = create_token(TOKEN_APPEND, ">>");
     head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "log.txt");
     head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+// --- New Error-Handling Test Cases ---
+
+/**
+ * @brief Test Input 11: ls -l |
+ * @purpose Tests for a pipe at the end of the command.
+ * The parser should recognize this as a syntax error because a pipe
+ * must be followed by another command.
+ */
+t_token *get_test_input_11_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "ls");
+    head->next = create_token(TOKEN_WORD, "-l");
+    head->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+/**
+ * @brief Test Input 12: cat < | wc
+ * @purpose Tests for an unexpected operator after a redirection.
+ * The parser should expect a filename (TOKEN_WORD) after a redirection
+ * operator like '<', not another operator like '|'.
+ */
+t_token *get_test_input_12_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "cat");
+    head->next = create_token(TOKEN_REDIRECT_IN, "<");
+    head->next->next = create_token(TOKEN_PIPE, "|");
+    head->next->next->next = create_token(TOKEN_WORD, "wc");
+    head->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+/**
+ * @brief Test Input 13: echo "test" >> >> log.txt
+ * @purpose Tests for consecutive, unexpected redirection operators.
+ * Two '>>' tokens in a row is a syntax error.
+ */
+t_token *get_test_input_13_tokens() {
+    t_token *head = create_token(TOKEN_WORD, "echo");
+    head->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next->next = create_token(TOKEN_APPEND, ">>");
+    head->next->next->next = create_token(TOKEN_APPEND, ">>");
+    head->next->next->next->next = create_token(TOKEN_WORD, "log.txt");
+    head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+    return head;
+}
+
+/**
+ * @brief Test Input 14: | ls
+ * @purpose Tests for a pipe at the beginning of a command. This is invalid syntax.
+ */
+t_token *get_test_input_14_tokens() {
+    t_token *head = create_token(TOKEN_PIPE, "|");
+    head->next = create_token(TOKEN_WORD, "ls");
+    head->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
 
