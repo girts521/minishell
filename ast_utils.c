@@ -18,3 +18,22 @@ void	free_ast(void)
 {
 	//TODO
 }
+
+void cleanup(t_ast *root)
+{
+	//TODO
+	//node->command_node->redirection (t_redirection_type)
+	//node->command_node->redir_dest (char **)
+	//node->command_node->args (char **)
+	//node itself t_ast
+	int i;
+
+	i = 0;
+	while (root)
+	{
+		if (root->type == COMMANDop) {
+		
+		}
+	}
+	
+}
