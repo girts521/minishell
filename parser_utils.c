@@ -13,9 +13,10 @@ void	*safe_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-void	clean_exit(char *error)
+void	clean_exit(t_token *token, t_ast *root, char *error)
 {
-	//TODO
 	printf("%s\n", error);
+	free_token_list(token);
+	cleanup(root);
 	exit(0);
 }

@@ -77,12 +77,15 @@ void	print_token_list(t_token *token_list);
 void	free_ast(void);
 long	count_args(t_token *token);
 long	count_redirs(t_token *token);
-void	handle_redirect(t_token *token, t_ast *current_node);
+t_token	*handle_redirect(t_token *token, t_ast *current_node);
 void	handle_command(t_token *token, t_ast *current_node);
 void	*safe_calloc(size_t count, size_t size);
-void	clean_exit(char *error);
+void	clean_exit(t_token *token, t_ast *root, char *error);
+void	cleanup(t_ast *root);
 t_ast	*handle_pipe(t_ast **root, t_ast *current_node);
-void	validate_token(t_token *token, t_token *previous_token);
+void	validate_token(t_token *token, t_token *previous_token, \
+					t_ast *root, t_token *token_head);
+long	count_args(t_token *token);
 t_token	*get_test_input_1_tokens(void);
 t_token	*get_test_input_2_tokens(void);
 t_token	*get_test_input_3_tokens(void);

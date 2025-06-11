@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-long	count_args(t_token *token)
-{
-	long	result;
-
-	result = 0;
-	while (token && token->type != TOKEN_PIPE)
-	{
-		if (token->type >= 0 && token->type < 3)
-			result++;
-		token = token->next;
-	}
-	return (result * sizeof(char *));
-}
-
 long	count_redirs(t_token *token)
 {
 	long	result;
@@ -28,21 +14,26 @@ long	count_redirs(t_token *token)
 	return (result);
 }
 
-void	handle_redirect(t_token *token, t_ast *current_node)
+void	malloc_redir(t_token *token, t_command_node *command_node)
 {
-	t_command_node	*command_node;
 	long			redirs_num;
 
-	redirs_num = 0;
+	redirs_num = count_redirs(token);
+	command_node->redirection = (t_redirection_type *)safe_calloc \
+					(1, redirs_num * sizeof(t_redirection_type *));
+	command_node->redir_dest = (char **)safe_calloc \
+					(1, redirs_num * sizeof(char *));
+}
+
+t_token	*handle_redirect(t_token *token, t_ast *current_node)
+{
+	t_command_node	*command_node;
+
 	command_node = &current_node->data.command_node;
 	if (!command_node->redirc)
 	{
 		command_node->redirc = 0;
-		redirs_num = count_redirs(token);
-		command_node->redirection = (t_redirection_type *)safe_calloc \
-						(1, redirs_num * sizeof(t_redirection_type *));
-		command_node->redir_dest = (char **)safe_calloc \
-						(1, redirs_num * sizeof(char *));
+		malloc_redir(token, command_node);
 	}
 	if (token->type == TOKEN_REDIRECT_IN)
 		command_node->redirection[command_node->redirc] = REDIR_IN;
@@ -53,7 +44,11 @@ void	handle_redirect(t_token *token, t_ast *current_node)
 	else if (token->type == TOKEN_HEREDOC)
 		command_node->redirection[command_node->redirc] = REDIR_HEREDOC;
 	if (token->next)
+	{
 		command_node->redir_dest[command_node->redirc++] = token->next->value;
+		return (token->next);
+	}
+	return (token);
 }
 
 void	handle_command(t_token *token, t_ast *current_node)

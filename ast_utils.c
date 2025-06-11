@@ -14,26 +14,33 @@ t_ast	*create_ast_node(void)
 	return (node);
 }
 
-void	free_ast(void)
+long	count_args(t_token *token)
 {
-	//TODO
+	long	result;
+
+	result = 0;
+	while (token && token->type != TOKEN_PIPE)
+	{
+		if (token->type >= 0 && token->type < 3)
+			result++;
+		token = token->next;
+	}
+	return (result * sizeof(char *));
 }
 
-void cleanup(t_ast *root)
+void	cleanup(t_ast *root)
 {
-	//TODO
-	//node->command_node->redirection (t_redirection_type)
-	//node->command_node->redir_dest (char **)
-	//node->command_node->args (char **)
-	//node itself t_ast
-	int i;
-
-	i = 0;
-	while (root)
+	if (!root)
+		return ;
+	if (root->type == COMMAND_NODE)
 	{
-		if (root->type == COMMANDop) {
-		
-		}
+		if (root->data.command_node.redirection)
+			free(root->data.command_node.redirection);
+		if (root->data.command_node.redir_dest)
+			free(root->data.command_node.redir_dest);
+		free(root->data.command_node.args);
 	}
-	
+	cleanup(root->left);
+	cleanup(root->right);
+	free(root);
 }
