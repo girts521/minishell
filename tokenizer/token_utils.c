@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:07:20 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/04 15:14:45 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/12 15:57:21 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	ft_word(t_token **token, char *line)
 
 	i = 0;
 	while (line[i] != '\0' && line[i] != ' ' && line[i] != '\t' &&
-		ft_recogn_t(line) == TOKEN_WORD)
+		ft_recogn_t(line + i) == TOKEN_WORD)
 		i++;
 	(*token)->value = ft_strndup(line, i);
 	if (!(*token)->value)

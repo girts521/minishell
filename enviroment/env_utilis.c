@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:10:10 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/05/29 19:10:23 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/12 16:22:24 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	ft_env_add_back(t_env **env, t_env *new)
 {
 	t_env *curr;
 
+	if (!new)
+		return ;
 	if (!*env)
 	{
 		*env = new;
@@ -68,4 +70,18 @@ void	ft_env_add_back(t_env **env, t_env *new)
 	while (curr->next)
 		curr = curr->next;
 	curr->next = new;
+}
+
+void	ft_free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
+	}
 }

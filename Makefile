@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -I. -Itokenizer -Ilibft -Ienviroment
 LIBFT = libft/libft.a
 
 SRCS = main.c \
-	tokenizer/token.c tokenizer/token_utils.c \
+	tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c \
 	enviroment/enviroment.c enviroment/env_utilis.c
 OBJS := $(SRCS:.c=.o)
 
