@@ -6,22 +6,6 @@
 # include "libft/libft.h"
 # include "enviroment/enviroment.h"
 
-
-
-// Your provided token type definition
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_STRING,
-	TOKEN_SQUOTE,
-	TOKEN_PIPE,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_EOF
-}			t_token_type;
-
 typedef enum e_ast_node_type
 {
 	COMMAND_NODE,
@@ -68,13 +52,6 @@ typedef struct s_ast
 	struct s_ast	*right;
 	t_ast_node		data;
 }				t_ast;
-
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next;
-}				t_token;
 
 t_ast	*create_ast_node(void);
 void	free_token_list(t_token *token_list);

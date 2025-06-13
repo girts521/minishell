@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "tokenizer/token.h"
 
 // Helper function to create a new token
 // This function allocates memory for the token and its value.
@@ -52,7 +53,7 @@ t_token *get_test_input_1_tokens() {
 // 4. TOKEN_EOF,    value: NULL
 t_token *get_test_input_2_tokens() {
     t_token *head = create_token(TOKEN_WORD, "echo");
-    head->next = create_token(TOKEN_STRING, "\"Hello $USER\"");
+    head->next = create_token(TOKEN_DQUOTE, "\"Hello $USER\"");
     head->next->next = create_token(TOKEN_SQUOTE, "'no expansion here'");
     head->next->next->next = create_token(TOKEN_EOF, NULL); // End of the command
     return head;
@@ -76,7 +77,7 @@ t_token *get_test_input_3_tokens() {
     head->next = create_token(TOKEN_WORD, "file.txt");
     head->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next = create_token(TOKEN_STRING, "\"search\"");
+    head->next->next->next->next = create_token(TOKEN_DQUOTE, "\"search\"");
     head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
@@ -93,7 +94,7 @@ t_token *get_test_input_3_tokens() {
 // 7. TOKEN_EOF,          value: NULL
 t_token *get_test_input_4_tokens() {
     t_token *head = create_token(TOKEN_WORD, "grep");
-    head->next = create_token(TOKEN_STRING, "\"error\"");
+    head->next = create_token(TOKEN_DQUOTE, "\"error\"");
     head->next->next = create_token(TOKEN_REDIRECT_IN, "<");
     head->next->next->next = create_token(TOKEN_WORD, "log.txt");
     head->next->next->next->next = create_token(TOKEN_APPEND, ">>");
@@ -141,7 +142,7 @@ t_token *get_test_input_6_tokens() {
     head->next->next = create_token(TOKEN_WORD, "infile");
     head->next->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next->next->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
     head->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
     head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
     head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
@@ -158,7 +159,7 @@ t_token *get_test_input_6_tokens() {
 // 3. TOKEN_EOF,    value: NULL
 t_token *get_test_input_7_tokens() {
     t_token *head = create_token(TOKEN_WORD, "echo");
-    head->next = create_token(TOKEN_STRING, "\"Status was: $?\"");
+    head->next = create_token(TOKEN_DQUOTE, "\"Status was: $?\"");
     head->next->next = create_token(TOKEN_EOF, NULL);
     return head;
 }
@@ -175,7 +176,7 @@ t_token *get_test_input_8_tokens() {
     t_token *head = create_token(TOKEN_REDIRECT_IN, "<");
     head->next = create_token(TOKEN_WORD, "infile");
     head->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
     head->next->next->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next->next->next = create_token(TOKEN_WORD, "wc");
     head->next->next->next->next->next->next = create_token(TOKEN_WORD, "-l");
@@ -195,7 +196,7 @@ t_token *get_test_input_9_tokens() {
     head->next = create_token(TOKEN_WORD, "-l");
     head->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next = create_token(TOKEN_STRING, "\".c\"");
+    head->next->next->next->next = create_token(TOKEN_DQUOTE, "\".c\"");
     head->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next->next->next->next = create_token(TOKEN_WORD, "sort");
     head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-r");
@@ -216,7 +217,7 @@ t_token *get_test_input_10_tokens() {
     head->next->next = create_token(TOKEN_WORD, "END");
     head->next->next->next = create_token(TOKEN_PIPE, "|");
     head->next->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next->next = create_token(TOKEN_STRING, "\"keyword\"");
+    head->next->next->next->next->next = create_token(TOKEN_DQUOTE, "\"keyword\"");
     head->next->next->next->next->next->next = create_token(TOKEN_APPEND, ">>");
     head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "log.txt");
     head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
@@ -261,7 +262,7 @@ t_token *get_test_input_12_tokens() {
  */
 t_token *get_test_input_13_tokens() {
     t_token *head = create_token(TOKEN_WORD, "echo");
-    head->next = create_token(TOKEN_STRING, "\"test\"");
+    head->next = create_token(TOKEN_DQUOTE, "\"test\"");
     head->next->next = create_token(TOKEN_APPEND, ">>");
     head->next->next->next = create_token(TOKEN_APPEND, ">>");
     head->next->next->next->next = create_token(TOKEN_WORD, "log.txt");
