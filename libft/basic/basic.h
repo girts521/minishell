@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:21:56 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/03/16 16:53:20 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/03 17:26:08 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 int		ft_strlcat(char *dest, const char *src, size_t size);
 char	*ft_strdup(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup_ch(const char *s, char ch);
+char	*ft_strndup(const char *s, int n);
 /*String Extranction*/
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strtrim(char const *s1, char const *set);

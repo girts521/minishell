@@ -1,7 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include "libft.h"
+# include "tokenizer/token.h"
+# include "libft/libft.h"
+# include "enviroment/enviroment.h"
+
+
 
 // Your provided token type definition
 typedef enum e_token_type

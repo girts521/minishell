@@ -1,7 +1,9 @@
-NAME = minishell 
+NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
-SRCS = main.c lexer.c print_ast.c ast_node_utils.c ast_utils.c parser_utils.c validate_tokens.c parser.c
+SRCS = main.c lexer.c print_ast.c ast_node_utils.c ast_utils.c parser_utils.c validate_tokens.c parser.c tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c enviroment/enviroment.c enviroment/env_utilis.c
+
+CFLAGS = -Wall -Wextra -Werror -I. -Itokenizer -Ilibft -Ienviroment
+
 OBJS := $(SRCS:.c=.o)
 
 LIBFT_DIR = libft
@@ -16,6 +18,7 @@ $(NAME): $(LIBFT) $(OBJS)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR) 
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -27,6 +30,10 @@ clean:
 fclean : clean
 	rm -rf $(NAME)
 	@make -C $(LIBFT_DIR) fclean
+
+fclean : clean
+	rm -rf $(NAME)
+	$(MAKE) -C libft fclean
 
 re: fclean all
 
