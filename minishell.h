@@ -86,6 +86,7 @@ t_ast	*handle_pipe(t_ast **root, t_ast *current_node);
 void	validate_token(t_token *token, t_token *previous_token, \
 					t_ast *root, t_token *token_head);
 long	count_args(t_token *token);
+t_ast	*parser(t_token *tokens);
 t_token	*get_test_input_1_tokens(void);
 t_token	*get_test_input_2_tokens(void);
 t_token	*get_test_input_3_tokens(void);
