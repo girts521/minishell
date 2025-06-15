@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "ast_parser.h"
 
 long	count_redirs(t_token *token)
 {

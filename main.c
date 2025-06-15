@@ -3,12 +3,25 @@
 int	main(void)
 {
 	t_ast	*root;
-	t_token	*tokens1;
+	t_token	*tokens;
+	char	*input;
 
-	tokens1 = get_test_input_5_tokens();
-	root = parser(tokens1);
-	print_ast(root);
-	free_token_list(tokens1);
-	cleanup(root);
+	tokens = ft_new_token_node();
+	while (1)
+	{
+		input = readline("$> ");
+		if (input == NULL)
+		{
+			printf("EOF...Quiting!");
+			break ;
+		}
+		if (ft_strcmp(input, "exit") == 0)
+			break ;
+		ft_populate_token_list(tokens, input);
+		root = parser(tokens);
+		print_ast(root);
+		ft_free_token_list(tokens);
+		cleanup(root);
+	}
 	return (1);
 }

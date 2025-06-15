@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ast_parser.h"
 
 void	ft_print_env_list(t_env *env)
 {
