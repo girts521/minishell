@@ -61,7 +61,7 @@ void	handle_command(t_token *token, t_ast *current_node)
 	if (command_node->value == NULL)
 	{
 		command_node->value = token->value;
-		command_node->args = (char **)safe_calloc(1, count_args(token) + 1);
+		command_node->args = (char **)safe_calloc(count_args(token) + 1, sizeof(char *));
 		command_node->argc = 0;
 	}
 	command_node->args[command_node->argc++] = token->value;

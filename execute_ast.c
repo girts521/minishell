@@ -7,11 +7,11 @@ void execute_ast(t_ast *root)
 	int child;
 	char **args;
 	char *command;
+	int status;
 
 	child = fork();
 	if (child == 0)
 	{
-		// command = (char *)malloc((ft_strlen("/bin/") + ft_strlen(root->data.command_node.value)) * sizeof(char) );
 		args = root->data.command_node.args;
 		command = ft_strjoin("/bin/", root->data.command_node.value);	
 		execve(command, args, NULL);
@@ -19,8 +19,7 @@ void execute_ast(t_ast *root)
 		command = NULL;
 		exit(1);
 	}
-	wait(&child);
+	waitpid(child, &status, 0);
 	rl_on_new_line();
-
 }
 
