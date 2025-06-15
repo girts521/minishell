@@ -20,6 +20,7 @@ int	main(void)
 		ft_populate_token_list(tokens, input);
 		root = parser(tokens);
 		print_ast(root);
+		execute_ast(root);
 		ft_free_token_list(tokens);
 		cleanup(root);
 	}
