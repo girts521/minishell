@@ -6,7 +6,6 @@ int	main(void)
 	t_token	*tokens;
 	char	*input;
 
-	tokens = ft_new_token_node();
 	while (1)
 	{
 		input = readline("$> ");
@@ -17,6 +16,7 @@ int	main(void)
 		}
 		if (ft_strcmp(input, "exit") == 0)
 			break ;
+		tokens = ft_new_token_node();
 		ft_populate_token_list(tokens, input);
 		root = parser(tokens);
 		print_ast(root);
