@@ -26,7 +26,7 @@ void execute_ast(t_ast *root)
 {
 	int child;
 	int left_child;
-	int right_child;
+	// int right_child;
 	int status;
 	int pipe_fd[2];
 
@@ -50,21 +50,21 @@ void execute_ast(t_ast *root)
 			else
 			 	execute_simple_command(root->left);
 		}
-		right_child = fork();
-		if (right_child == 0)
-		{
-			close(pipe_fd[1]);
-			dup2(pipe_fd[0], 0); 
-			close(pipe_fd[0]);
-			if (root->right->type == PIPE_NODE)
-				execute_ast(root->right);
-			else
-			 	execute_simple_command(root->right);
-		}
-		close(pipe_fd[0]);
+		// right_child = fork();
+		// if (right_child == 0)
+		// {
 		close(pipe_fd[1]);
-		waitpid(left_child, &status, 0);
-		waitpid(right_child, &status, 0);
+		dup2(pipe_fd[0], 0); 
+		close(pipe_fd[0]);
+		if (root->right->type == PIPE_NODE)
+			execute_ast(root->right);
+		else
+			execute_simple_command(root->right);
+	// }
+		// close(pipe_fd[0]);
+		// close(pipe_fd[1]);
+		// waitpid(left_child, &status, 0);
+		// waitpid(right_child, &status, 0);
 	}
 	else if (root->type == COMMAND_NODE)
 	{
