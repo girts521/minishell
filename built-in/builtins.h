@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 18:13:00 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/18 17:43:14 by mattiamagri      ###   ########.fr       */
+/*   Created: 2025/05/26 16:45:14 by mmagrin           #+#    #+#             */
+/*   Updated: 2025/06/18 18:42:56 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-# include "tokenizer/token.h"
-# include "libft/libft.h"
-# include "enviroment/enviroment.h"
-# include "built-in/builtins.h"
+void	ft_echo(t_token *token);
+void	ft_pwd(void);
+int		ft_is_builtin(char *cmd);
 
 #endif

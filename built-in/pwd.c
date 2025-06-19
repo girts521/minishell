@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 18:13:00 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/18 17:43:14 by mattiamagri      ###   ########.fr       */
+/*   Created: 2025/06/18 18:31:57 by mattiamagri       #+#    #+#             */
+/*   Updated: 2025/06/18 18:51:01 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "tokenizer/token.h"
-# include "libft/libft.h"
-# include "enviroment/enviroment.h"
-# include "built-in/builtins.h"
+void	ft_pwd(void)
+{
+	char	*cwd;
+	
+	cwd = getcwd(NULL, 0);
+	if (cwd)
+	{
+		ft_printf("%s\n", cwd);
+		free (cwd);
+	}
+	else
+		perror("pwd");
+}
 
-#endif
+// int main(void)
+// {
+// 	ft_pwd();
+// 	return (0);
+// }
