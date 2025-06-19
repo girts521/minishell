@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:21:56 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/03 17:26:08 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/19 15:31:32 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		ft_isalnum(unsigned char c);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isin(int c, char const *set);
+int		ft_isdigit_str(char *str);
 /*Character Tranformation*/
 int		ft_toupper(int c);
 int		ft_tolower(int c);

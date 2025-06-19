@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 17:38:53 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/19 15:36:40 by mmagrin          ###   ########.fr       */
+/*   Created: 2025/06/19 16:23:29 by mmagrin           #+#    #+#             */
+/*   Updated: 2025/06/19 17:48:20 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "basic.h"
+#include "minishell.h"
 
-int	ft_isdigit(int c)
+int main(int argc, char **argv, char **envp)
 {
-	if (c >= '0' && c <= '9')
-		return (1);
+	t_env	*env;
+	// t_token	*token_list;
+
+	(void)argc;
+	(void)argv;
+	env = ft_init_env(envp);
+	ft_print_env_list(env);
+	ft_free_env(env);
+	// (void)envp;
+	// token_list = ft_new_token_node();
+	// ft_populate_token_list(token_list, "ls -l| ' wc' -l");
+	// ft_print_token_list(token_list);
+	// ft_free_token_list(token_list);
 	return (0);
 }
-
-int	ft_isdigit_str(char *str)
-{
-	while (*str)
-	{
-		if (*str <= '0' || *str >= '9')
-			return (0);
-		str++;
-	}
-	return (1);
-}
-
-// int	main(void)
-// {
-// 	printf("%d", ft_isdigit_str("12345 gfud"));
-// 	return 0;
-// }
