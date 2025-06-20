@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:21:56 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/19 15:31:32 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/20 16:28:42 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ typedef struct s_list
 /*							Character Functions*/
 /*Character Classification*/
 int		ft_isalpha(int c);
+int		ft_isalpha_str(char *str);
 int		ft_isdigit(int c);
+int		ft_isdigit_str(char *str);
 int		ft_isalnum(unsigned char c);
+int		ft_isalnum_str(char *str);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isin(int c, char const *set);
-int		ft_isdigit_str(char *str);
 /*Character Tranformation*/
 int		ft_toupper(int c);
 int		ft_tolower(int c);
