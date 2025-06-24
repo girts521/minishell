@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/18 18:29:50 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/06/24 16:01:27 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_echo(t_token *token)
 {
 	int	new_line;
-	
+
 	new_line = 1;
 	while (token && ft_strcmp(token->value, "-n") == 0)
 	{
