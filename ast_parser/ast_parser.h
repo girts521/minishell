@@ -25,18 +25,17 @@ typedef enum e_redirection_type
 typedef struct s_pipe_node
 {
 	t_ast_node_type	type;
-	// TODO;
 }				t_pipe_node;
 
 typedef struct s_command_node
 {
 	t_ast_node_type		type;
-	char				*value;
+	char				*value; 
 	char				**args;
 	long				argc;
 	long				redirc;
 	t_redirection_type	*redirection;
-	char				**redir_dest;
+	char				**redir_dest; 
 
 }				t_command_node;
 

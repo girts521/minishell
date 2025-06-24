@@ -65,7 +65,7 @@ void	handle_command(t_token *token, t_ast *current_node)
 		command_node->argc = 0;
 	}
 	command_node->args[command_node->argc++] = token->value;
-	}
+}
 
 t_ast	*handle_pipe(t_ast **root, t_ast *current_node)
 {

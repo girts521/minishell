@@ -20,7 +20,7 @@ t_token	*ft_new_token_node(void)
 	if (!new)
 		return (NULL);
 	new->value = NULL;
-	new->type = -1;
+	new->type = TOKEN_EOF;
 	new->next = NULL;
 	return (new);
 }
