@@ -1,5 +1,8 @@
 #include "ast_parser.h"
 
+//TODO:
+//validate the double and single token strings 
+//the variable expansion should be done here as well
 t_ast	*parser(t_token *tokens)
 {
 	t_ast	*current_node;
