@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:07:11 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/24 16:09:00 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/24 18:19:31 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,52 @@ char	*ft_extract_value_export(t_token *token)
 	return (new_value);
 }
 
+int	ft_help_add(t_token *token, t_env *env)
+{
+	char	*key;
+	char	*value;
+
+	key = ft_extract_key(token);
+	value = ft_extract_value_export(token);
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+		{
+			free(env->value);
+			if (value)
+				env->value = value;
+			else
+				env->value = ft_strdup("");
+			free(key);
+			return (1);
+		}
+		env = env->next;
+	}
+	free(key);
+	free(value);
+	return (0);
+}
+
 void	ft_add_var_value(t_token *token, t_env *env)
 {
 	t_env	*new_node;
+	int		not_do;
 
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	new_node->key = ft_extract_key(token);
-	new_node->value = ft_extract_value_export(token);
-	if (!new_node->value)
-		new_node->value = ft_strdup("''");
-	new_node->next = NULL;
-	while (env->next != NULL)
-		env = env->next;
-	env = new_node;
+	not_do = ft_help_add(token, env);
+	if (not_do == 0)
+	{
+		new_node = malloc(sizeof(t_env));
+		if (!new_node)
+			return ;
+		new_node->key = ft_extract_key(token);
+		new_node->value = ft_extract_value_export(token);
+		if (!new_node->value)
+			new_node->value = ft_strdup("");
+		new_node->next = NULL;
+		while (env->next)
+			env = env->next;
+		env->next = new_node;
+	}
 }
 
 void	ft_export(t_token *token, t_env *env)

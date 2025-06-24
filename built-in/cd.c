@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:07:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/19 18:26:56 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:28:52 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	ft_set_pwd(t_env *env)
 	return (0);
 }
 
-char	*ft_target_path(t_token *token, t_env *env)
+char	*ft_target_path(char *arg, t_env *env)
 {
 	char	*target;
 
-	if (!token)
+	if (!arg[1])
 	{
 		while (ft_strcmp(env->key, "HOME") != 0)
 		{
@@ -68,20 +68,20 @@ char	*ft_target_path(t_token *token, t_env *env)
 		target = env->value;
 	}
 	else
-		target = token->value;
+		target = arg;
 	return (target);
 }
 
-int	ft_cd(t_token *token, t_env *env)
+int	ft_cd(char **args, t_env *env)
 {
 	char	*target;
 
-	if (token->next)
+	if (args[2])
 	{
 		ft_printf("minishell: cd: too many arguments\n");
 		return (1);
 	}
-	target = ft_target_path(token, env);
+	target = ft_target_path(args[1], env);
 	if (!target)
 		return (1);
 	ft_set_oldpwd(env);

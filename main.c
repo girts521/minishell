@@ -20,12 +20,16 @@ void	execution(t_ast *root)
 		waitpid(child, &status, 0);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*root;
 	t_token	*tokens;
+	t_env	*env;
 	char	*input;
 
+	(void)argc;
+	(void)**argv;
+	env = ft_init_env(envp);
 	while (1)
 	{
 		input = readline("$> ");
