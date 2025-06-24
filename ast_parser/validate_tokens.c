@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "ast_parser.h"
 
 void	validate_pipe(t_token *token, t_token *previous_token, \
 						t_ast *root, t_token *token_head)
@@ -6,7 +6,7 @@ void	validate_pipe(t_token *token, t_token *previous_token, \
 	if (!previous_token || previous_token->type > 2)
 		clean_exit(token_head, root, "Syntax error! The previous \
 					token of a pipe must be a word like token! \n");
-	if (token-> next && (token->next->type == TOKEN_EOF || \
+	if (!token->next || (token->next->type == TOKEN_EOF || \
 							token->next->type == TOKEN_PIPE))
 		clean_exit(token_head, root, "Syntax error! Pipe \
 		character can not be followed by another pipe or by an EOF\n");

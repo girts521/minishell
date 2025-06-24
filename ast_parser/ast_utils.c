@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "ast_parser.h"
 
 //Creates a node with  empty values. 
 //Used COMMAND_NODE as default, should 

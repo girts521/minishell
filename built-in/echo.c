@@ -6,12 +6,27 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/24 16:01:27 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:29:52 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+void	ft_echo(char **args)
+{
+	int	i;
+
+	i = 1;
+	while (*args[i])
+	{
+		if (ft_recogn_t(*args[i]) == 1 || ft_recogn_t == 2)
+		
+		ft_printf("%s", *args[i]);
+	}
+}
+
+/*
 void	ft_echo(t_token *token)
 {
 	int	new_line;
@@ -38,3 +53,4 @@ void	ft_echo(t_token *token)
 	if (new_line)
 		ft_printf("\n");
 }
+*/

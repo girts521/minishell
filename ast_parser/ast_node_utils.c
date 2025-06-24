@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "ast_parser.h"
 
 long	count_redirs(t_token *token)
 {
@@ -58,18 +58,13 @@ void	handle_command(t_token *token, t_ast *current_node)
 	current_node->type = COMMAND_NODE;
 	command_node = &current_node->data.command_node;
 	command_node->type = COMMAND_NODE;
-	if (!command_node->argc)
-		command_node->argc = 0;
-	if (command_node->value)
-	{
-		command_node->args[command_node->argc] = token->value;
-		command_node->argc++;
-	}
-	else
+	if (command_node->value == NULL)
 	{
 		command_node->value = token->value;
-		command_node->args = (char **)safe_calloc(1, count_args(token));
+		command_node->args = (char **)safe_calloc(count_args(token) + 1, sizeof(char *));
+		command_node->argc = 0;
 	}
+	command_node->args[command_node->argc++] = token->value;
 }
 
 t_ast	*handle_pipe(t_ast **root, t_ast *current_node)

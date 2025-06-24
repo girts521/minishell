@@ -1,33 +1,30 @@
 NAME = minishell
 CC = cc
-SRCS = main.c lexer.c print_ast.c ast_node_utils.c ast_utils.c parser_utils.c validate_tokens.c parser.c tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c enviroment/enviroment.c enviroment/env_utilis.c
+SRCS = main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/parser_utils.c ast_parser/validate_tokens.c ast_parser/parser.c ast_parser/print_ast.c ast_parser/print_helpers.c tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c enviroment/enviroment.c enviroment/env_utilis.c execute_ast.c
 
-CFLAGS = -Wall -Wextra -Werror
 OBJS := $(SRCS:.c=.o)
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-INCLUDES = -I$(LIBFT_DIR) -I./ -Itokenizer -Ilibft -Ienviroment
+
+CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser
+LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $@
+	$(CC) $(OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJS)
 	@make -C $(LIBFT_DIR) clean
-
-fclean : clean
-	rm -rf $(NAME)
-	@make -C $(LIBFT_DIR) fclean
 
 fclean : clean
 	rm -rf $(NAME)
@@ -36,3 +33,5 @@ fclean : clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+
