@@ -10,6 +10,7 @@ t_ast	*parser(t_token *tokens)
 	current_node = create_ast_node();
 	root = current_node;
 	token_head = tokens;
+	previous_token = NULL;
 	while (tokens)
 	{
 		validate_token(tokens, previous_token, root, token_head);
