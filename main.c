@@ -30,6 +30,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)**argv;
 	env = ft_init_env(envp);
+	(void)env;
 	while (1)
 	{
 		input = readline("$> ");

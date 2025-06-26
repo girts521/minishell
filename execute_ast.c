@@ -16,6 +16,8 @@ void	execute_simple_command(t_ast *node)
 
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
+	printf("node->data.command_node.value: %s\n", node->data.command_node.value);
+	printf("command: %s\n", command);
 	if (ft_strcmp(args[0], "echo") == 0)
 	{
 		ft_echo(args);

@@ -3,69 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:07:11 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/24 18:19:31 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:16:12 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_controll_token(t_token *token)
+int	ft_controll_token(char **args)
 {
 	int	i;
+	int	y;
 
-	while (token)
+	y = 1;
+	while (args[y])
 	{
-		if (token->value[0] != '_' && ft_isalpha(token->value[0]) != 1)
+		if (args[y][0] != '_' && ft_isalpha(args[y][0]) != 1)
 			return (1);
 		i = 1;
-		while (token->value[i] != '\0' && token->value[i] != '=')
+		while (args[y][i] != '\0' && args[y][i] != '=')
 		{
-			if (token->value[i] != '_' && ft_isalnum(token->value[i]) != 1)
+			if (args[y][i] != '_' && ft_isalnum(args[y][i]) != 1)
 				return (1);
 			i++;
 		}
-		token = token->next;
+		y++;
 	}
 	return (0);
 }
 
-char	*ft_extract_key(t_token *token)
+char	*ft_extract_key(char *arg)
 {
 	char	*new_var;
 	int		i;
 
 	i = 0;
-	while (token->value[i] != '\0' && token->value[i] != '=')
+	while (arg[i] != '\0' && arg[i] != '=')
 		i++;
-	new_var = ft_strndup(token->value, i);
+	new_var = ft_strndup(arg, i);
 	return (new_var);
 }
 
-char	*ft_extract_value_export(t_token *token)
+char	*ft_extract_value_export(char *arg)
 {
 	char	*new_value;
 	int		i;
 
 	i = 0;
-	if (ft_isin('=', token->value) != 1)
+	if (ft_isin('=', arg) != 1)
 		return (NULL);
-	while (token->value[i] != '\0' && token->value[i] != '=')
+	while (arg[i] != '\0' && arg[i] != '=')
 		i++;
 	i++;
-	new_value = ft_strdup(token->value + i);
+	new_value = ft_strdup(arg + i);
 	return (new_value);
 }
 
-int	ft_help_add(t_token *token, t_env *env)
+int	ft_help_add(char *arg, t_env *env)
 {
 	char	*key;
 	char	*value;
 
-	key = ft_extract_key(token);
-	value = ft_extract_value_export(token);
+	key = ft_extract_key(arg);
+	value = ft_extract_value_export(arg);
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
@@ -85,19 +87,19 @@ int	ft_help_add(t_token *token, t_env *env)
 	return (0);
 }
 
-void	ft_add_var_value(t_token *token, t_env *env)
+void	ft_add_var_value(char *arg, t_env *env)
 {
 	t_env	*new_node;
 	int		not_do;
 
-	not_do = ft_help_add(token, env);
+	not_do = ft_help_add(arg, env);
 	if (not_do == 0)
 	{
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
-		new_node->key = ft_extract_key(token);
-		new_node->value = ft_extract_value_export(token);
+		new_node->key = ft_extract_key(arg);
+		new_node->value = ft_extract_value_export(arg);
 		if (!new_node->value)
 			new_node->value = ft_strdup("");
 		new_node->next = NULL;
@@ -107,13 +109,16 @@ void	ft_add_var_value(t_token *token, t_env *env)
 	}
 }
 
-void	ft_export(t_token *token, t_env *env)
+void	ft_export(char **args, t_env *env)
 {
-	if (ft_controll_token(token) == 1)
+	int	i;
+
+	i = 0;
+	if (ft_controll_token(args) == 1)
 		return ;
-	while (token)
+	while (args[i])
 	{
-		ft_add_var_value(token, env);
-		token = token->next;
+		ft_add_var_value(args[i], env);
+		i++;
 	}
 }

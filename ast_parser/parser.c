@@ -11,6 +11,8 @@ t_ast	*parser(t_token *tokens)
 	root = current_node;
 	token_head = tokens;
 	previous_token = NULL;
+	(void)token_head;
+	(void)previous_token;
 	while (tokens)
 	{
 		// ft_expand_var(tokens, env); to create!!
