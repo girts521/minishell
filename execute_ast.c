@@ -1,5 +1,6 @@
 #include "libft/basic/basic.h"
 #include "minishell.h"
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <stdio.h>
 #include <sys/wait.h>
@@ -9,6 +10,92 @@
 //if yes then open the dest file keeping fd.keep in mind the permissions needed
 //use dup2 function to update the stdin or stdout based on the redir type
 //close the fd of the dest file that was opened before
+
+void handle_heredoc(t_ast *node, long redirc)
+{
+	char *delimiter;
+
+	delimiter = node->data.command_node.redir_dest[redirc];
+
+}
+
+void handle_redir_append(t_ast *node, long redirc)
+{
+	char *dest;	
+	int dest_fd;
+
+	mode_t mode = 0644;
+	dest = node->data.command_node.redir_dest[redirc];
+	dest_fd = open(dest, O_WRONLY | O_APPEND | O_CREAT, mode);
+	if (dest_fd < 0)
+	{
+		perror(dest);
+		//handle clean exit
+	}
+	dup2(dest_fd, STDOUT_FILENO);
+	close(dest_fd);
+
+
+}
+
+void handle_redir_out(t_ast *node, long redirc)
+{
+	char *dest;	
+	int dest_fd;
+
+	mode_t mode = 0644;
+	dest = node->data.command_node.redir_dest[redirc];
+	dest_fd = open(dest, O_WRONLY | O_TRUNC | O_CREAT, mode);
+	if (dest_fd < 0)
+	{
+		perror(dest);
+		//handle clean exit
+	}
+	dup2(dest_fd, STDOUT_FILENO);
+	close(dest_fd);
+
+}
+
+void handle_redir_in(t_ast *node, long redirc)
+{
+	char *dest;	
+	int dest_fd;
+
+	dest = node->data.command_node.redir_dest[redirc];
+	dest_fd = open(dest, O_RDONLY);
+	if (dest_fd < 0)
+	{
+		perror(dest);
+		//handle clean exit
+	}
+	dup2(dest_fd, STDIN_FILENO);
+	close(dest_fd);
+}
+
+void handle_redirs(t_ast *node)
+{
+	t_redirection_type redir_type;
+	long redirc;
+
+	redirc = 0;
+	if (node->data.command_node.redirc == 0)	
+		return ;	
+	redir_type = node->data.command_node.redirection[redirc];
+	while (redir_type)
+	{
+		if (redir_type == REDIR_IN)
+			handle_redir_in(node, redirc);
+		else if (redir_type == REDIR_OUT)
+			handle_redir_out(node, redirc);
+		// else if (redir_type == REDIR_HEREDOC)
+		// 	handle_heredoc(node, redirc);
+		else if (redir_type == REDIR_APPEND)
+			handle_redir_append(node, redirc);
+		redirc++;
+		redir_type = node->data.command_node.redirection[redirc];
+	}	
+}
+
 void	execute_simple_command(t_ast *node)
 {
 	char	**args;
@@ -16,6 +103,8 @@ void	execute_simple_command(t_ast *node)
 
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
+	printf("redirc: %ld\n", node->data.command_node.redirc);
+	handle_redirs(node);
 	execve(command, args, NULL);
 	free(command);
 	command = NULL;
