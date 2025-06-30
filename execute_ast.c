@@ -11,13 +11,13 @@
 //use dup2 function to update the stdin or stdout based on the redir type
 //close the fd of the dest file that was opened before
 
-void handle_heredoc(t_ast *node, long redirc)
-{
-	char *delimiter;
-
-	delimiter = node->data.command_node.redir_dest[redirc];
-
-}
+// void handle_heredoc(t_ast *node, long redirc)
+// {
+// 	char *delimiter;
+//
+// 	delimiter = node->data.command_node.redir_dest[redirc];
+//
+// }
 
 void handle_redir_append(t_ast *node, long redirc)
 {

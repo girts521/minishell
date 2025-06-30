@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <readline/history.h>
+
 
 void	execution(t_ast *root)
 {
@@ -36,6 +38,7 @@ int	main(void)
 		}
 		if (ft_strcmp(input, "exit") == 0)
 			break ;
+		add_history(input);
 		tokens = ft_new_token_node();
 		ft_populate_token_list(tokens, input);
 		root = parser(tokens);
