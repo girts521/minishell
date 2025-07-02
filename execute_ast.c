@@ -1,4 +1,5 @@
 #include "libft/basic/basic.h"
+#include "libft/get_next_line/get_next_line.h"
 #include "minishell.h"
 #include <fcntl.h>
 #include <readline/readline.h>
@@ -11,13 +12,30 @@
 //use dup2 function to update the stdin or stdout based on the redir type
 //close the fd of the dest file that was opened before
 
-// void handle_heredoc(t_ast *node, long redirc)
-// {
-// 	char *delimiter;
-//
-// 	delimiter = node->data.command_node.redir_dest[redirc];
-//
-// }
+// get next line on stdin 
+// check if the line is == to delimiter
+// if yes then 
+void handle_heredoc(t_ast *node, long redirc)
+{
+	char *delimiter;
+	char *line;
+	int temp_file;
+	char *dest;
+
+	mode_t mode = 0644;
+	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
+	temp_file = open(dest, O_WRONLY | O_APPEND | O_CREAT, mode);
+	delimiter = node->data.command_node.redir_dest[redirc];
+	line = get_next_line(0);
+	while (line != delimiter)
+	{
+		write(temp_file, line, ft_strlen(line));		
+		line = get_next_line(0);
+	}
+	dup2(temp_file, STDERR_FILENO);
+	close(temp_file);
+	unlink(dest);
+}
 
 void handle_redir_append(t_ast *node, long redirc)
 {
@@ -87,8 +105,8 @@ void handle_redirs(t_ast *node)
 			handle_redir_in(node, redirc);
 		else if (redir_type == REDIR_OUT)
 			handle_redir_out(node, redirc);
-		// else if (redir_type == REDIR_HEREDOC)
-		// 	handle_heredoc(node, redirc);
+		else if (redir_type == REDIR_HEREDOC)
+			handle_heredoc(node, redirc);
 		else if (redir_type == REDIR_APPEND)
 			handle_redir_append(node, redirc);
 		redirc++;
