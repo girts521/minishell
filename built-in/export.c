@@ -6,33 +6,11 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:07:11 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/26 17:16:12 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/02 15:37:18 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_controll_token(char **args)
-{
-	int	i;
-	int	y;
-
-	y = 1;
-	while (args[y])
-	{
-		if (args[y][0] != '_' && ft_isalpha(args[y][0]) != 1)
-			return (1);
-		i = 1;
-		while (args[y][i] != '\0' && args[y][i] != '=')
-		{
-			if (args[y][i] != '_' && ft_isalnum(args[y][i]) != 1)
-				return (1);
-			i++;
-		}
-		y++;
-	}
-	return (0);
-}
 
 char	*ft_extract_key(char *arg)
 {
