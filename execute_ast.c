@@ -61,43 +61,61 @@
 // execute all nodes as usual
 // //##########################################
 
+char *execute_heredoc(t_ast *node, long redirc);
+
 void handle_heredoc(t_ast *ast)
 {
 	int heredoc_counter;
+	int i;
+	char *dest;
 
 	heredoc_counter = 0;
-	while (ast)
+	if (!ast)
+		return;
+	if (ast->data.command_node.redirc)
 	{
-		if (ast->data.command_node.redirection) {
-		
-		}	
-	}
+		i = 0;
+		while (ast->data.command_node.redirection[i])
+		{
+			if (ast->data.command_node.redirection[i] == REDIR_HEREDOC)
+			{
+				dest = execute_heredoc(ast,i);
+				ast->data.command_node.redirection[i] = REDIR_IN;
+				ast->data.command_node.redir_dest[i] = dest;
+				//add the dest to some linked list that will be freed later
+				heredoc_counter++;
+			}	
+			i++;
+		}
+	}	
+	handle_heredoc(ast->left);
+	handle_heredoc(ast->right);
 }
 
-// void handle_heredoc(t_ast *node, long redirc)
-// {
-// 	char *delimiter;
-// 	char *line;
-// 	int temp_file;
-// 	char *dest;
-//
-// 	mode_t mode = 0644;
-// 	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
-// 	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, mode);
-// 	delimiter = node->data.command_node.redir_dest[redirc];
-// 	line = get_next_line(0);
-// 	while (ft_strncmp(line, delimiter, ft_strlen(delimiter)) != 0)
-// 	{
-// 		write(temp_file, line, ft_strlen(line));		
-// 		line = get_next_line(0);
-// 	}
-// 	close(temp_file);
-// 	temp_file = open(dest, O_RDONLY);
-// 	dup2(temp_file, STDIN_FILENO);
-// 	close(temp_file);
-// 	unlink(dest);
-// }
-//
+char  *execute_heredoc(t_ast *node, long redirc)
+{
+	char *delimiter;
+	char *line;
+	int temp_file;
+	char *dest;
+
+	mode_t mode = 0644;
+	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
+	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, mode);
+	delimiter = node->data.command_node.redir_dest[redirc];
+	line = get_next_line(0);
+	while (ft_strncmp(line, delimiter, ft_strlen(delimiter)) != 0)
+	{
+		write(temp_file, line, ft_strlen(line));		
+		line = get_next_line(0);
+	}
+	close(temp_file);
+	temp_file = open(dest, O_RDONLY);
+	dup2(temp_file, STDIN_FILENO);
+	close(temp_file);
+	return (dest);
+}
+
 void handle_redir_append(t_ast *node, long redirc)
 {
 	char *dest;	
@@ -166,8 +184,6 @@ void handle_redirs(t_ast *node)
 			handle_redir_in(node, redirc);
 		else if (redir_type == REDIR_OUT)
 			handle_redir_out(node, redirc);
-		else if (redir_type == REDIR_HEREDOC)
-			handle_heredoc(node, redirc);
 		else if (redir_type == REDIR_APPEND)
 			handle_redir_append(node, redirc);
 		redirc++;
@@ -182,7 +198,6 @@ void	execute_simple_command(t_ast *node)
 
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
-	printf("redirc: %ld\n", node->data.command_node.redirc);
 	handle_redirs(node);
 	execve(command, args, NULL);
 	free(command);
@@ -227,6 +242,7 @@ void	execute_ast(t_ast *root)
 
 	if (!root)
 		return ;
+	handle_heredoc(root);
 	if (root->type == PIPE_NODE)
 		execute_pipe(pipe_fd, root);
 	else if (root->type == COMMAND_NODE)
