@@ -15,28 +15,89 @@
 // get next line on stdin 
 // check if the line is == to delimiter
 // if yes then 
-void handle_heredoc(t_ast *node, long redirc)
-{
-	char *delimiter;
-	char *line;
-	int temp_file;
-	char *dest;
+//
+//
+// // Refined Step-by-Step Plan
+// Here is a slightly more detailed version of your plan, confirming your logic:
+//
+// Start "Heredoc Pass": Before any execution, begin a complete traversal of the Abstract Syntax Tree (AST).
+//
+// Find & Execute Heredocs: When a REDIR_HEREDOC node is found:
+//
+// Prompt the user and read input until the delimiter is found.
+//
+// Write this input to a new temporary file (e.g., /tmp/minishell_heredoc_123).
+//
+// Add the path of this temporary file to a dedicated cleanup list.
+//
+// Transform the AST Node:
+//
+// Change the node's redirection type from REDIR_HEREDOC to REDIR_IN.
+//
+// Update the node's redirection destination to be the path of the temporary file you just created.
+//
+// Finish Pass 1: Continue traversing until the entire tree has been checked.
+//
+// Start "Execution Pass": Begin the main execution of the now-modified AST.
+//
+// Execute commands and pipelines as you normally would. When your handle_redirs function sees the node you changed, it will treat it as a simple input redirection from a file, which your handle_redir_in function already knows how to do.
+//
+// Wait & Clean Up: After the entire command
+//has finished executing (e.g., after waitpid in your main loop), iterate through your cleanup list and unlink() every temporary file path it contains.
+//
+//##########################################
+// traverse the tree
+//
+// if a heredoc is encountered -> execute it
+//
+// add the temp file path to an array or linked list
+//
+// update the command nodes execution from heredoc to redirin
+//
+// move till the end of tree
+//
+// go to main execution loop
+//
+// execute all nodes as usual
+// //##########################################
 
-	mode_t mode = 0644;
-	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
-	temp_file = open(dest, O_WRONLY | O_APPEND | O_CREAT, mode);
-	delimiter = node->data.command_node.redir_dest[redirc];
-	line = get_next_line(0);
-	while (line != delimiter)
+void handle_heredoc(t_ast *ast)
+{
+	int heredoc_counter;
+
+	heredoc_counter = 0;
+	while (ast)
 	{
-		write(temp_file, line, ft_strlen(line));		
-		line = get_next_line(0);
+		if (ast->data.command_node.redirection) {
+		
+		}	
 	}
-	dup2(temp_file, STDERR_FILENO);
-	close(temp_file);
-	unlink(dest);
 }
 
+// void handle_heredoc(t_ast *node, long redirc)
+// {
+// 	char *delimiter;
+// 	char *line;
+// 	int temp_file;
+// 	char *dest;
+//
+// 	mode_t mode = 0644;
+// 	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
+// 	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, mode);
+// 	delimiter = node->data.command_node.redir_dest[redirc];
+// 	line = get_next_line(0);
+// 	while (ft_strncmp(line, delimiter, ft_strlen(delimiter)) != 0)
+// 	{
+// 		write(temp_file, line, ft_strlen(line));		
+// 		line = get_next_line(0);
+// 	}
+// 	close(temp_file);
+// 	temp_file = open(dest, O_RDONLY);
+// 	dup2(temp_file, STDIN_FILENO);
+// 	close(temp_file);
+// 	unlink(dest);
+// }
+//
 void handle_redir_append(t_ast *node, long redirc)
 {
 	char *dest;	

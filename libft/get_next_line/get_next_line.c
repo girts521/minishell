@@ -12,26 +12,6 @@
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s)
-{
-	char	*copy;
-	int		len;
-	int		i;
-
-	len = ft_strlen(s);
-	copy = (char *)malloc((len + 1) * sizeof(char));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		copy[i] = s[i];
-		i++;
-	}
-	copy[len] = '\0';
-	return (copy);
-}
-
 void	*ft_freer(char *buffer)
 {
 	free (buffer);

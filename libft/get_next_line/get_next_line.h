@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include "../basic/basic.h"
 
 int		ft_strch(char *str, char c);
 int		ft_strlen(const char *str);

@@ -26,43 +26,6 @@ int	ft_strch(char *str, char c)
 	return (0);
 }
 
-int	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*joinstr;
-	int		len_join;
-	int		i;
-	int		j;
-
-	len_join = ft_strlen(s1) + ft_strlen(s2);
-	joinstr = malloc((len_join + 1) * sizeof(char));
-	if (!joinstr)
-		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		joinstr[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j] != '\0')
-	{
-		joinstr[i + j] = s2[j];
-		j++;
-	}
-	joinstr[i + j] = '\0';
-	return (joinstr);
-}
-
 char	*ft_extract_rest(char *s1)
 {
 	int		i;
