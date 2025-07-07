@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:35:26 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/02 15:36:20 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/07 16:44:55 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,17 @@ int	ft_controll_token(char **args)
 		y++;
 	}
 	return (0);
+}
+
+int	ft_envlst_size(t_env *env)
+{
+	int	len;
+
+	len = 0;
+	while (env != NULL)
+	{
+		len++;
+		env = env->next;
+	}
+	return (len);
 }

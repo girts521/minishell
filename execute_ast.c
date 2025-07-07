@@ -18,9 +18,15 @@ void	execute_simple_command(t_ast *node, t_env *env)
 	builtins_check = 0;
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
-	builtins_check = ft_is_builtin(args[1]);
+	builtins_check = ft_is_builtin(args[0]);
+	if (builtins_check == 2 || builtins_check == 4 || builtins_check == 5 || builtins_check == 7)
+	{
+		free(command);
+		command = NULL;
+		exit(1);
+	}
 	if (builtins_check != 0)
-		ft_select_bultin(args, env, builtins_check);
+		ft_select_builtin(args, env, builtins_check);
 	else
 		execve(command, args, NULL);
 	free(command);
@@ -59,9 +65,11 @@ void	execute_pipe(int pipe_fd[2], t_ast *root, t_env *env)
 
 void	execute_ast(t_ast *root, t_env *env)
 {
-	int	child;
-	int	status;
-	int	pipe_fd[2];
+	int		child;
+	int		status;
+	int		pipe_fd[2];
+	char	**args;
+	int		builtin_code;
 
 	if (!root)
 		return ;
@@ -69,6 +77,13 @@ void	execute_ast(t_ast *root, t_env *env)
 		execute_pipe(pipe_fd, root, env);
 	else if (root->type == COMMAND_NODE)
 	{
+		args = root->data.command_node.args;
+		builtin_code = ft_is_builtin(args[0]);
+		if (builtin_code == 2 || builtin_code == 4 || builtin_code == 5 || builtin_code == 7)
+		{
+			ft_select_builtin(args, env, builtin_code);
+			return ;
+		}
 		child = fork();
 		if (child == 0)
 			execute_simple_command(root, env);

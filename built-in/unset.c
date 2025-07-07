@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:44:24 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/02 15:30:10 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/07 16:47:22 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	ft_unset(char **args, t_env **env)
 {
 	int	i;
 	int	silence;
-	t_env	*tmp;
-	t_env	*prev;
 
 	silence = 0;
 	i = 1;

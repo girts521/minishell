@@ -6,13 +6,13 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:07:11 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/02 15:37:18 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/07 18:32:47 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_extract_key(char *arg)
+char	*ft_extract_key_export(char *arg)
 {
 	char	*new_var;
 	int		i;
@@ -44,7 +44,7 @@ int	ft_help_add(char *arg, t_env *env)
 	char	*key;
 	char	*value;
 
-	key = ft_extract_key(arg);
+	key = ft_extract_key_export(arg);
 	value = ft_extract_value_export(arg);
 	while (env)
 	{
@@ -76,7 +76,7 @@ void	ft_add_var_value(char *arg, t_env *env)
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return ;
-		new_node->key = ft_extract_key(arg);
+		new_node->key = ft_extract_key_export(arg);
 		new_node->value = ft_extract_value_export(arg);
 		if (!new_node->value)
 			new_node->value = ft_strdup("");
@@ -91,9 +91,18 @@ void	ft_export(char **args, t_env *env)
 {
 	int	i;
 
-	i = 0;
+	if (!args[1])
+	{
+		while(env && env->key && env->value)
+		{
+			ft_printf("%s=%s\n", env->key, env->value);
+			env = env->next;
+		}
+		return ;
+	}
 	if (ft_controll_token(args) == 1)
 		return ;
+	i = 1;
 	while (args[i])
 	{
 		ft_add_var_value(args[i], env);

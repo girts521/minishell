@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/02 15:50:43 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/07 17:24:40 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	**ft_env_to_envp(t_env *env)
 	char	*joined;
 	int		i;
 
-	i = ft_lstsize(env);
+	i = ft_envlst_size(env);
 	envp = malloc(sizeof(char *) * (i + 1));
 	if (!envp)
 		return (NULL);
@@ -65,7 +65,7 @@ int	ft_env(char **args, t_env *env)
 	
 	if (!args[1])
 	{
-		while(env && env->key && env->value)
+		while(env && env->key && env->value && env->next != NULL)
 		{
 			ft_printf("%s=%s\n", env->key, env->value);
 			env = env->next;
