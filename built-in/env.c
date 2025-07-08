@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/07 17:24:40 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/08 18:22:36 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ int	ft_env_help(char **args, t_env *env)
 }
 
 int	ft_env(char **args, t_env *env)
-{	
+{
 	int	check;
-	
+
 	if (!args[1])
 	{
-		while(env && env->key && env->value && env->next != NULL)
+		while(env && env->key && env->value)
 		{
 			ft_printf("%s=%s\n", env->key, env->value);
 			env = env->next;

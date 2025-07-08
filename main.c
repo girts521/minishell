@@ -5,19 +5,18 @@
 
 void	execution(t_ast *root, t_env *env)
 {
-	int	child;
-	int	status;
+//	int	child;
+//	int	status;
 
-	child = fork();
-	if (child == -1)
-		perror("Failed to fork a child!\n");
-	else if (child == 0)
-	{
-		execute_ast(root, env);
-		exit(0);
-	}
-	else
-		waitpid(child, &status, 0);
+//	if (child == -1)
+	//	perror("Failed to fork a child!\n");
+//	else if (child == 0)
+//	{
+	execute_ast(root, env, 0);
+	// 	exit(0);
+	// }
+	// else
+//		waitpid(child, &status, 0);
 }
 
 int	main(int argc, char **argv, char **envp)
