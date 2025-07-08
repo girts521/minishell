@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -62,8 +63,22 @@
 // //##########################################
 
 char *execute_heredoc(t_ast *node, long redirc);
+void heredoc_cleanup(t_list **dest_cleanup)
+{
+	t_list *current_node;
 
-void handle_heredoc(t_ast *ast)
+	current_node = *dest_cleanup;
+	printf("Starting cleanup\n");
+	while (current_node)
+	{
+		printf("Cleaning up dest...\n");
+		unlink(current_node->content);
+		free(current_node->content);
+		current_node = current_node->next;
+	}
+}
+
+void handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 {
 	int heredoc_counter;
 	int i;
@@ -83,13 +98,14 @@ void handle_heredoc(t_ast *ast)
 				ast->data.command_node.redirection[i] = REDIR_IN;
 				ast->data.command_node.redir_dest[i] = dest;
 				//add the dest to some linked list that will be freed later
+				ft_lstadd_back(dest_cleanup, ft_lstnew(dest));
 				heredoc_counter++;
 			}	
 			i++;
 		}
 	}	
-	handle_heredoc(ast->left);
-	handle_heredoc(ast->right);
+	handle_heredoc(ast->left, dest_cleanup);
+	handle_heredoc(ast->right, dest_cleanup);
 }
 
 char  *execute_heredoc(t_ast *node, long redirc)
@@ -109,9 +125,6 @@ char  *execute_heredoc(t_ast *node, long redirc)
 		write(temp_file, line, ft_strlen(line));		
 		line = get_next_line(0);
 	}
-	close(temp_file);
-	temp_file = open(dest, O_RDONLY);
-	dup2(temp_file, STDIN_FILENO);
 	close(temp_file);
 	return (dest);
 }
@@ -239,10 +252,13 @@ void	execute_ast(t_ast *root)
 	int	child;
 	int	status;
 	int	pipe_fd[2];
+	t_list *dest_cleanup;
 
+	dest_cleanup = NULL;
 	if (!root)
 		return ;
-	handle_heredoc(root);
+	handle_heredoc(root, &dest_cleanup);
+	heredoc_cleanup(&dest_cleanup);	
 	if (root->type == PIPE_NODE)
 		execute_pipe(pipe_fd, root);
 	else if (root->type == COMMAND_NODE)
