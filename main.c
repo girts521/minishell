@@ -12,7 +12,7 @@ void	execution(t_ast *root, t_env *env)
 	//	perror("Failed to fork a child!\n");
 //	else if (child == 0)
 //	{
-	execute_ast(root, env, 0);
+	execute_ast(root, env);
 	// 	exit(0);
 	// }
 	// else

@@ -6,4 +6,4 @@
 # include <readline/readline.h>
 # include "built-in/builtins.h"
 
-void execute_ast(t_ast *root, t_env *env, int piping);
+void execute_ast(t_ast *root, t_env *env);

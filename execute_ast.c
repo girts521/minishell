@@ -5,10 +5,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-//check if node has any info about redirs
-//if yes then open the dest file keeping fd.keep in mind the permissions needed
-//use dup2 function to update the stdin or stdout based on the redir type
-//close the fd of the dest file that was opened before
 void	execute_simple_command(t_ast *node, t_env *env)
 {
 	char	**args;
@@ -19,33 +15,22 @@ void	execute_simple_command(t_ast *node, t_env *env)
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
 	builtins_check = ft_is_builtin(args[0]);
-	if (builtins_check == 2 || builtins_check == 4 || builtins_check == 5 || builtins_check == 7)
-	{
-		free(command);
-		command = NULL;
-		exit(1);
-	}
 	if (builtins_check != 0)
 		ft_select_builtin(args, env, builtins_check);
 	else
-	{
 		execve(command, args, NULL);
-		printf("do we get here? %s\n", args[1]);
-	}
 	free(command);
 	command = NULL;
 	exit(1);
 }
 
-void	execute_pipe(int pipe_fd[2], t_ast *root, t_env *env)
+void	execute_pipe(t_ast *root, t_env *env)
 {
 	int	left_child;
-	int	favorit_child;
-	int	status;
-	int	piping;
+	int	right_child;
+	int status;
+	int pipe_fd[2];
 
-	status = 0;
-	piping = 0;
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("Error creating pipe!\n");
@@ -58,56 +43,53 @@ void	execute_pipe(int pipe_fd[2], t_ast *root, t_env *env)
 		dup2(pipe_fd[1], 1);
 		close(pipe_fd[1]);
 		if (root->left->type == PIPE_NODE)
-		{
-			piping = 1;
-			execute_ast(root->left, env, piping);
-		}
+			execute_pipe(root->left, env);
 		else
 			execute_simple_command(root->left, env);
+		exit(0);
 	}
-	// if (left_child > 0)
-	// {
-	// 	printf("we starting waiting: lefty\n");
-	// 	waitpid(left_child, &status, 0);
-	// 	printf("we done waiting: lefty\n");
-	// }
-	favorit_child = fork();
-	if (favorit_child == 0)
+	right_child = fork();
+	if (right_child == 0)
 	{
-		printf("we starting waiting: lefty\n");
-		waitpid(left_child, &status, 0);
-		printf("we done waiting: lefty\n");
 		close(pipe_fd[1]);
 		dup2(pipe_fd[0], 0);
 		close(pipe_fd[0]);
 		if (root->right->type == PIPE_NODE)
-		{
-			piping = 1;
-			execute_ast(root->right, env, piping);
-		}
+			execute_pipe(root->right, env);
 		else
 			execute_simple_command(root->right, env);
+		exit(0);
 	}
-	if (favorit_child > 0)
+	if (left_child > 0 && right_child > 0)
 	{
-		printf("we starting waiting: favorit\n");
-		waitpid(favorit_child, &status, 0);
-		printf("we done waiting: favorit\n");
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		waitpid(left_child, &status, 0);
+		waitpid(right_child, &status, 0);
 	}
 }
 
-void	execute_ast(t_ast *root, t_env *env, int piping)
+void	execute_ast(t_ast *root, t_env *env)
 {
 	int		child;
 	int		status;
-	int		pipe_fd[2];
 	char	**args;
 	int		builtin_code;
+	int 	pipe_child;
 
 	if (!root)
 		return ;
 	if (root->type == PIPE_NODE)
-		execute_pipe(pipe_fd, root, env);
+	{
+		pipe_child = fork();
+		if (pipe_child == 0)
+		{
+			execute_pipe(root, env);
+			exit(0);
+		}
+		else if (pipe_child > 0)
+			waitpid(pipe_child, &status, 0);
+	}
 	else if (root->type == COMMAND_NODE)
 	{
 		args = root->data.command_node.args;
@@ -126,6 +108,4 @@ void	execute_ast(t_ast *root, t_env *env, int piping)
 			perror("Error forking a child!\n");
 		rl_on_new_line();
 	}
-	if (piping)
-		exit(0);
 }
