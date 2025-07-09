@@ -4,8 +4,9 @@
 # include <sys/wait.h>
 # include "ast_parser/ast_parser.h"
 # include <readline/readline.h>
+# include "built-in/builtins.h"
 
-void execute_ast(t_ast *root);
+void execute_ast(t_ast *root, t_env *env);
 char *execute_heredoc(t_ast *node, long redirc);
 char  *execute_heredoc(t_ast *node, long redirc);
 void handle_heredoc(t_ast *ast, t_list **dest_cleanup);

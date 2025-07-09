@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:34:23 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/12 16:27:54 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/07 16:50:22 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ t_env	*ft_create_node(void *content)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->key = ft_extract_key(content);
-	new_node->value = ft_extract_value(content);
+	new_node->key = ft_extract_key_env(content);
+	new_node->value = ft_extract_value_env(content);
 	new_node->next = NULL;
 	if (!new_node->key || !new_node->value)
 	{

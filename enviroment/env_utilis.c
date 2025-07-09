@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utilis.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:10:10 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/12 16:22:24 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/07 16:50:40 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_strch_i(char *str, char c)
 	return (-1);
 }
 
-char	*ft_extract_key(char *env_str)
+char	*ft_extract_key_env(char *env_str)
 {
 	int		i;
 	char	*key;
@@ -43,7 +43,7 @@ char	*ft_extract_key(char *env_str)
 	return (key);
 }
 
-char	*ft_extract_value(char *env_str)
+char	*ft_extract_value_env(char *env_str)
 {
 	char	*value;
 	char	*ptr;

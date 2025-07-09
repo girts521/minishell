@@ -14,9 +14,12 @@ t_ast	*parser(t_token *tokens)
 	root = current_node;
 	token_head = tokens;
 	previous_token = NULL;
+	(void)token_head;
+	(void)previous_token;
 	while (tokens)
 	{
-		validate_token(tokens, previous_token, root, token_head);
+		// ft_expand_var(tokens, env); to create!!
+		//validate_token(tokens, previous_token, root, token_head);
 		if (tokens->type == TOKEN_EOF)
 			break ;
 		if (tokens->type >= 0 && tokens->type <= 2)
@@ -42,6 +45,6 @@ t_ast	*parser(t_token *tokens)
 // 	free_token_list(tokens1);
 // 	cleanup(root);
 // 	return (1);
-// 
+//
 /*
  */
