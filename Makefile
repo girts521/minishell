@@ -5,7 +5,7 @@ SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/pars
 		enviroment/enviroment.c enviroment/env_utilis.c \
 		execute_ast.c \
 		built-in/echo.c built-in/cd.c built-in/env.c built-in/exit.c built-in/export.c built-in/is_builtin.c built-in/pwd.c built-in/unset.c built-in/utils.c \
-		redirection/handle_heredoc.c handle_redirs.c \
+		redirection/handle_heredoc.c redirection/handle_redirs.c \
 
 OBJS := $(SRCS:.c=.o)
 
