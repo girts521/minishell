@@ -15,6 +15,7 @@ void	execute_simple_command(t_ast *node, t_env *env)
 	int		builtins_check;
 
 	builtins_check = 0;
+	handle_redirs(node);
 	args = node->data.command_node.args;
 	command = ft_strjoin("/bin/", node->data.command_node.value);
 	builtins_check = ft_is_builtin(args[0]);
@@ -79,9 +80,12 @@ void	execute_ast(t_ast *root, t_env *env)
 	char	**args;
 	int		builtin_code;
 	int 	pipe_child;
+	t_list  *dest_cleanup;
 
+	dest_cleanup = NULL;
 	if (!root)
 		return ;
+	handle_heredoc(root, &dest_cleanup);
 	if (root->type == PIPE_NODE)
 	{
 		pipe_child = fork();
@@ -104,11 +108,15 @@ void	execute_ast(t_ast *root, t_env *env)
 		}
 		child = fork();
 		if (child == 0)
+		{
+			handle_redirs(root);
 			execute_simple_command(root, env);
+		}
 		else if (child > 0)
 			waitpid(child, &status, 0);
 		else
 			perror("Error forking a child!\n");
 		rl_on_new_line();
 	}
+	heredoc_cleanup(&dest_cleanup);
 }
