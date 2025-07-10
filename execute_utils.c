@@ -12,7 +12,7 @@ void	execute_next_node(t_ast *root, t_env *env, char *direction)
 	if (next_node->type == PIPE_NODE)
 		execute_pipe(next_node, env);
 	else
-		execute_simple_command(root->right, env);
+		execute_simple_command(next_node, env);
 	exit(0);
 }
 
