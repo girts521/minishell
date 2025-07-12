@@ -6,6 +6,8 @@
 #include <readline/readline.h>
 #include "built-in/builtins.h"
 
+int	tests(int argc, char **argv, char **envp);
+
 void	execute_ast(t_ast *root, t_env *env);
 char	*execute_heredoc(t_ast *node, long redirc);
 char	*execute_heredoc(t_ast *node, long redirc);
