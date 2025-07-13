@@ -19,7 +19,7 @@ t_ast	*parser(t_token *tokens)
 	while (tokens)
 	{
 		// ft_expand_var(tokens, env); to create!!
-		//validate_token(tokens, previous_token, root, token_head);
+		validate_token(tokens, previous_token, root, token_head);
 		if (tokens->type == TOKEN_EOF)
 			break ;
 		if (tokens->type >= 0 && tokens->type <= 2)
