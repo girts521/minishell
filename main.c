@@ -1,16 +1,18 @@
 #include "minishell.h"
+#include <readline/readline.h>
 #include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <readline/history.h>
 
+#include <errno.h>
+
+volatile sig_atomic_t g_signal_number = 0;
+
 void	handle_sigint(int sig)
 {
-	(void)sig;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	g_signal_number = sig;
+	// write(1, "\nHANDLER_FIRED\n", 15);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -36,16 +38,26 @@ int	main(int argc, char **argv, char **envp)
 	input = NULL;
 	while (1)
 	{
+		g_signal_number = 0;
 		input = readline("$> ");
-		if (input == NULL)
+		printf("%d\n", g_signal_number);
+		if (input == NULL || g_signal_number != 0 )
 		{
-			printf("EOF...Quiting!");
-			break ;
-		}
-		if (input[0] == '\0')
-		{
-			free(input);
-			continue;
+			printf("am i here?\n");
+			if (g_signal_number == SIGINT)
+			{
+				// your_env->last_exit_status = 130; // Set $? to 130
+				printf("\n");
+				rl_replace_line("", 0);
+				rl_redisplay();
+				rl_on_new_line();
+				continue ;
+			}
+			else 
+			{
+				printf("EOF...Quiting!");
+				break ;
+			}
 		}
 		if (ft_strcmp(input, "exit") == 0)
 			break ;
