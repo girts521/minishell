@@ -18,5 +18,5 @@ void	clean_exit(t_token *token, t_ast *root, char *error)
 	printf("%s\n", error);
 	ft_free_token_list(token);
 	cleanup(root);
-	exit(0);
+	exit(1);
 }
