@@ -9,10 +9,22 @@
 
 volatile sig_atomic_t g_signal_number = 0;
 
-void	handle_sigint(int sig)
+
+void	handle_execution_sigint(int sig)
 {
+	 g_signal_number = sig;
+    printf("\n");
+}
+
+void	handle_interactive_sigint(int sig)
+{    
+	(void)sig;
+	
 	g_signal_number = sig;
-	// write(1, "\nHANDLER_FIRED\n", 15);
+    printf("\n");
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -28,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)**argv;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_int.sa_handler = handle_sigint;
+	sa_int.sa_handler = handle_interactive_sigint;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
@@ -40,24 +52,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_signal_number = 0;
 		input = readline("$> ");
-		printf("%d\n", g_signal_number);
-		if (input == NULL || g_signal_number != 0 )
+		if (input == NULL )
 		{
-			printf("am i here?\n");
-			if (g_signal_number == SIGINT)
-			{
-				// your_env->last_exit_status = 130; // Set $? to 130
-				printf("\n");
-				rl_replace_line("", 0);
-				rl_redisplay();
-				rl_on_new_line();
-				continue ;
-			}
-			else 
-			{
-				printf("EOF...Quiting!");
-				break ;
-			}
+			printf("EOF...Quiting!");
+			break ;
 		}
 		if (ft_strcmp(input, "exit") == 0)
 			break ;
@@ -66,7 +64,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_populate_token_list(tokens, input);
 		root = parser(tokens);
 		// print_ast(root);
-		execute_ast(root, env);
+		execute_ast(root, env, &sa_int);
 		free(input);
 		ft_free_token_list(tokens);
 		cleanup(root);

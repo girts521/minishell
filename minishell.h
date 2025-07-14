@@ -8,7 +8,7 @@
 
 int	tests(int argc, char **argv, char **envp);
 
-void	execute_ast(t_ast *root, t_env *env);
+void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int);
 char	*execute_heredoc(t_ast *node, long redirc);
 char	*execute_heredoc(t_ast *node, long redirc);
 void	handle_heredoc(t_ast *ast, t_list **dest_cleanup);
@@ -20,3 +20,5 @@ void	execute_next_node(t_ast *root, t_env *env, char *direction);
 void	handle_children(int close_fd, int dup_fd, int pipe_fd[2]);
 void	handle_parent(int pipe_fd[2], int left_child, \
 						int right_child, int status);
+void	handle_execution_sigint(int sig);
+void	handle_interactive_sigint(int sig);
