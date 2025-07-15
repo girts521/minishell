@@ -85,7 +85,7 @@ void	execute_single_command(t_ast *root, t_env *env, int *status)
 	rl_on_new_line();
 }
 
-void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int)
+void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_quit)
 {
 	int		status;
 	int		pipe_child;
@@ -97,8 +97,8 @@ void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int)
 	handle_heredoc(root, &dest_cleanup);
 	if (root->type == PIPE_NODE)
 	{
-		sa_int->sa_handler = handle_execution_sigint;
-		sigaction(SIGINT, sa_int, NULL);
+		sa_quit->sa_handler = quit_handler; 
+		sigaction(SIGQUIT, sa_quit, NULL);
 		pipe_child = fork();
 		if (pipe_child == 0)
 		{
@@ -106,13 +106,13 @@ void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int)
 			exit(0);
 		}
 		else if (pipe_child > 0)
-		{
 			waitpid(pipe_child, &status, 0);
-			sa_int->sa_handler = handle_interactive_sigint;
-			sigaction(SIGINT, sa_int, NULL);
-		}
 	}
 	else if (root->type == COMMAND_NODE)
+	{
+		signal_switch(HANDLE, sa_quit);
 		execute_single_command(root, env, &status);
+		signal_switch(IGNORE, sa_quit);
+	}
 	heredoc_cleanup(&dest_cleanup);
 }

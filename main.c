@@ -9,24 +9,26 @@
 
 volatile sig_atomic_t g_signal_number = 0;
 
-
-void	handle_execution_sigint(int sig)
+//can be done in one, need to check the state, readline state and some istty
+void quit_handler(int sig)
 {
-	 g_signal_number = sig;
-	printf("execution \n");
-    printf("\n");
+	(void)sig;
+	printf("Quit (core dumped)");
+	printf("\n");
 }
 
-void	handle_interactive_sigint(int sig)
+void	handle_sigint(int sig)
 {    
 	(void)sig;
-	
+
 	g_signal_number = sig;
-	printf("interractive \n");
-    printf("\n");
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	printf("\n");
+	if ((isatty(STDIN_FILENO) && rl_readline_state &RL_STATE_READCMD))
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -42,11 +44,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)**argv;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = 0;
-	sa_int.sa_handler = handle_interactive_sigint;
+	sa_int.sa_handler = handle_sigint;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0;
-	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_handler = SIG_IGN; 
 	sigaction(SIGQUIT, &sa_quit, NULL);
 	env = ft_init_env(envp);
 	input = NULL;
@@ -66,7 +68,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_populate_token_list(tokens, input);
 		root = parser(tokens);
 		// print_ast(root);
-		execute_ast(root, env, &sa_int);
+		execute_ast(root, env, &sa_quit);
 		free(input);
 		ft_free_token_list(tokens);
 		cleanup(root);

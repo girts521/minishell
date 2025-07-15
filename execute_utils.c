@@ -31,3 +31,12 @@ void	handle_parent(int pipe_fd[2], int left_child, \
 	waitpid(left_child, &status, 0);
 	waitpid(right_child, &status, 0);
 }
+
+void signal_switch(t_sigquit status, struct sigaction *sa_quit)
+{
+	if (status == IGNORE)
+		sa_quit->sa_handler = SIG_IGN;
+	else if (status == HANDLE)
+		sa_quit->sa_handler = quit_handler; 
+	sigaction(SIGQUIT, sa_quit, NULL);
+}
