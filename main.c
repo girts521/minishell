@@ -13,6 +13,7 @@ volatile sig_atomic_t g_signal_number = 0;
 void	handle_execution_sigint(int sig)
 {
 	 g_signal_number = sig;
+	printf("execution \n");
     printf("\n");
 }
 
@@ -21,6 +22,7 @@ void	handle_interactive_sigint(int sig)
 	(void)sig;
 	
 	g_signal_number = sig;
+	printf("interractive \n");
     printf("\n");
     rl_on_new_line();
     rl_replace_line("", 0);

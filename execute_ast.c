@@ -98,6 +98,7 @@ void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int)
 	if (root->type == PIPE_NODE)
 	{
 		sa_int->sa_handler = handle_execution_sigint;
+		sigaction(SIGINT, sa_int, NULL);
 		pipe_child = fork();
 		if (pipe_child == 0)
 		{
@@ -108,6 +109,7 @@ void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_int)
 		{
 			waitpid(pipe_child, &status, 0);
 			sa_int->sa_handler = handle_interactive_sigint;
+			sigaction(SIGINT, sa_int, NULL);
 		}
 	}
 	else if (root->type == COMMAND_NODE)
