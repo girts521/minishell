@@ -8,6 +8,7 @@ t_ast	*create_ast_node(void)
 	t_ast	*node;
 
 	node = (t_ast *)safe_calloc(1, sizeof(t_ast));
+	// printf("DEBUG: Allocated AST Node at address: %p\n", (void *)node);
 	node->type = COMMAND_NODE;
 	node->left = NULL;
 	node->right = NULL;
@@ -28,19 +29,31 @@ long	count_args(t_token *token)
 	return (result * sizeof(char *));
 }
 
-void	cleanup(t_ast *root)
+void	ast_cleanup(t_ast *root)
 {
 	if (!root)
 		return ;
+	ast_cleanup(root->left);
+	ast_cleanup(root->right);
+	// printf("DEBUG: Freeing AST Node at address:   %p\n", (void *)root);
 	if (root->type == COMMAND_NODE)
 	{
-		if (root->data.command_node.redirection)
-			free(root->data.command_node.redirection);
 		if (root->data.command_node.redir_dest)
 			free(root->data.command_node.redir_dest);
-		free(root->data.command_node.args);
+		if (root->data.command_node.redirection)
+			free(root->data.command_node.redirection);
+		if (root->data.command_node.args)
+			free(root->data.command_node.args);
 	}
-	cleanup(root->left);
-	cleanup(root->right);
 	free(root);
+}
+
+void	cleanup(t_ast *root, char *input, t_token *tokens)
+{
+	if (input)
+		free(input);
+	if (tokens)
+	ft_free_token_list(tokens);
+	if (root)
+	ast_cleanup(root);
 }
