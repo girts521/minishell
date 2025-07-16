@@ -12,3 +12,6 @@ char  *execute_heredoc(t_ast *node, long redirc);
 void handle_heredoc(t_ast *ast, t_list **dest_cleanup);
 void heredoc_cleanup(t_list **dest_cleanup);
 void handle_redirs(t_ast *node);
+char	*ft_get_command_path(t_env *env, char *cmd);
+void	ft_expand_var(t_token *token, t_env *env);
+void	ft_print_env(t_env *env);

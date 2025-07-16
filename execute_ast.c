@@ -11,20 +11,35 @@
 void	execute_simple_command(t_ast *node, t_env *env)
 {
 	char	**args;
+	char	**envp;
 	char	*command;
 	int		builtins_check;
 
 	builtins_check = 0;
 	args = node->data.command_node.args;
-	command = ft_strjoin("/bin/", node->data.command_node.value);
+	// int i = 0;
+	// while(1)
+	// {
+	// 	if (!args[i])
+	// 		break ;
+	// 	ft_printf("%s\n", args[i]);
+	// 	i++;
+	// }
 	builtins_check = ft_is_builtin(args[0]);
 	if (builtins_check != 0)
 		ft_select_builtin(args, env, builtins_check);
 	else
-		execve(command, args, NULL);
-	free(command);
+	{
+		command = ft_get_command_path(env, node->data.command_node.value);
+		if (!command)
+			exit(127);
+		envp = ft_env_to_envp(env);
+		execve(command, args, envp);
+		ft_free_pointertopointer(envp);
+		free(command);
+	}
 	command = NULL;
-	exit(1);
+	exit(0);
 }
 
 void	execute_pipe(t_ast *root, t_env *env)

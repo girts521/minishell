@@ -5,6 +5,8 @@
 #include <readline/history.h>
 
 
+
+
 void	execution(t_ast *root, t_env *env)
 {
 //	int	child;
@@ -39,11 +41,12 @@ int	main(int argc, char **argv, char **envp)
 			printf("EOF...Quiting!");
 			break ;
 		}
-		if (ft_strcmp(input, "exit") == 0)
-			break ;
+		//if (ft_strcmp(input, "exit") == 0)
+		//	break ;
 		add_history(input);
 		tokens = ft_new_token_node();
 		ft_populate_token_list(tokens, input);
+		ft_expand_var(tokens, env);
 		root = parser(tokens);
 		print_ast(root);
 		execution(root, env);

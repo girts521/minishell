@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isin.c                                          :+:      :+:    :+:   */
+/*   ft_is_white_space.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 16:27:19 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/15 16:24:41 by mattiamagri      ###   ########.fr       */
+/*   Created: 2025/07/15 16:32:09 by mattiamagri       #+#    #+#             */
+/*   Updated: 2025/07/15 16:35:41 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "basic.h"
 
-int	ft_isin(int c, char const *set)
+int	ft_is_white_space(int c)
 {
-	int	i;
-
-	i = 0;
-	while (set[i] != '\0')
-	{
-		if (c == set[i])
-			return (i);
-		i++;
-	}
-	return (-1);
+	if (c == 9 || c == 10 || c == 11 || c == 12 || c == 13 || c == 32)
+		return (1);
+	return (0);
 }

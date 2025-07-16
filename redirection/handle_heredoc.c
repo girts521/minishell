@@ -15,11 +15,11 @@ void heredoc_cleanup(t_list **dest_cleanup)
 
 void handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 {
-	int heredoc_counter;
+//	int heredoc_counter;
 	int i;
 	char *dest;
 
-	heredoc_counter = 0;
+	//heredoc_counter = 0;
 	if (!ast)
 		return;
 	if (ast->data.command_node.redirc)
@@ -34,7 +34,7 @@ void handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 				ast->data.command_node.redir_dest[i] = dest;
 				//add the dest to some linked list that will be freed later
 				ft_lstadd_back(dest_cleanup, ft_lstnew(dest));
-				heredoc_counter++;
+			//	heredoc_counter++;
 			}	
 			i++;
 		}

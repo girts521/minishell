@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:07:11 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/07 18:32:47 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/16 18:58:48 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ char	*ft_extract_value_export(char *arg)
 	int		i;
 
 	i = 0;
-	if (ft_isin('=', arg) != 1)
+	if (ft_isin('=', arg) == -1)
 		return (NULL);
-	while (arg[i] != '\0' && arg[i] != '=')
+	while (arg[i] != '=')
 		i++;
 	i++;
 	new_value = ft_strdup(arg + i);
 	return (new_value);
 }
 
-int	ft_help_add(char *arg, t_env *env)
+int	ft_add_existing_key(char *arg, t_env *env)
 {
 	char	*key;
 	char	*value;
@@ -68,10 +68,10 @@ int	ft_help_add(char *arg, t_env *env)
 void	ft_add_var_value(char *arg, t_env *env)
 {
 	t_env	*new_node;
-	int		not_do;
+	int		already_exist;
 
-	not_do = ft_help_add(arg, env);
-	if (not_do == 0)
+	already_exist = ft_add_existing_key(arg, env);
+	if (already_exist == 0)
 	{
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
@@ -93,11 +93,7 @@ void	ft_export(char **args, t_env *env)
 
 	if (!args[1])
 	{
-		while(env && env->key && env->value)
-		{
-			ft_printf("%s=%s\n", env->key, env->value);
-			env = env->next;
-		}
+		ft_print_env(env);
 		return ;
 	}
 	if (ft_controll_token(args) == 1)

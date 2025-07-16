@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   basic.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:21:56 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/20 16:28:42 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/15 16:31:52 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		ft_isalnum_str(char *str);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isin(int c, char const *set);
+int		ft_is_white_space(int c);
 /*Character Tranformation*/
 int		ft_toupper(int c);
 int		ft_tolower(int c);

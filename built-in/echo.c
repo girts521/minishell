@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/24 17:03:42 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/14 18:33:56 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	ft_echo(char **args)
 		else
 			ft_printf("%s", args[i]);
 		i++;
+		if (args[i])
+			ft_printf(" ");
 	}
 	if (!no_nl)
 		ft_printf("\n");

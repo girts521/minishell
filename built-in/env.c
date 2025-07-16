@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/08 18:22:36 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/16 19:17:12 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_env_help(char **args, t_env *env)
 	char	*command;
 	char	**envp;
 
-	command = ft_strjoin("/bin/", args[1]);
+	command = ft_get_command_path(env, args[0]);
 	if (!command)
 		return (1);
 	envp = ft_env_to_envp(env);
@@ -65,9 +65,13 @@ int	ft_env(char **args, t_env *env)
 
 	if (!args[1])
 	{
-		while(env && env->key && env->value)
+		while (env)
 		{
-			ft_printf("%s=%s\n", env->key, env->value);
+			if (env->key && env->value && env->value[0] != '\0')
+			{
+				ft_printf("%s=", env->key);
+				ft_printf("%s\n", env->value);
+			}
 			env = env->next;
 		}
 	}
