@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/14 18:33:56 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/16 20:36:39 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,18 @@
 void	ft_echo(char **args)
 {
 	int	i;
+	int	y;
 	int	no_nl;
 
 	no_nl = 0;
 	i = 1;
-	while (args[i][0] == '-' && args[i][1] == 'n')
+	while (args[i][0] == '-')
 	{
+		y = 1;
+		while(args[i][y] == 'n')
+			y++;
+		if(args[i][y] != '\0')
+			break ;
 		no_nl = 1;
 		i++;
 	}
