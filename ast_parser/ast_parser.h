@@ -63,10 +63,9 @@ t_token	*handle_redirect(t_token *token, t_ast *current_node);
 void	handle_command(t_token *token, t_ast *current_node);
 void	*safe_calloc(size_t count, size_t size);
 void	clean_exit(t_token *token, t_ast *root, char *error);
-void	cleanup(t_ast *root);
+void	cleanup(t_ast *root, char *input, t_token *tokens);
 t_ast	*handle_pipe(t_ast **root, t_ast *current_node);
-void	validate_token(t_token *token, t_token *previous_token, \
-					t_ast *root, t_token *token_head);
+int		validate_token(t_token *token, t_token *previous_token);
 long	count_args(t_token *token);
 t_ast	*parser(t_token *tokens);
 t_token	*get_test_input_1_tokens(void);

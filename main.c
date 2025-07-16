@@ -7,72 +7,59 @@
 
 #include <errno.h>
 
-volatile sig_atomic_t g_signal_number = 0;
+volatile sig_atomic_t	g_signal_number = 0;
 
-//can be done in one, need to check the state, readline state and some istty
-void quit_handler(int sig)
+void	parse_execute(char *input, t_env *env, struct sigaction *sa_quit)
 {
-	(void)sig;
-	printf("Quit (core dumped)");
-	printf("\n");
+	t_ast	*root;
+	t_token	*tokens;
+
+	tokens = ft_new_token_node();
+	ft_populate_token_list(tokens, input);
+	root = parser(tokens);
+	if (!root || !tokens)
+	{
+		cleanup(root, input, tokens);
+		return ;
+	}
+	// print_ast(root);
+	execute_ast(root, env, sa_quit);
+	cleanup(root, input, tokens);
+	rl_on_new_line();
 }
 
-void	handle_sigint(int sig)
-{    
-	(void)sig;
-
-	g_signal_number = sig;
-	printf("\n");
-	if ((isatty(STDIN_FILENO) && rl_readline_state &RL_STATE_READCMD))
+int	handle_exit(char *input)
+{
+	if (input == NULL )
 	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		printf("EOF...Quiting!");
+		return (1);
 	}
+	if (ft_strcmp(input, "exit") == 0)
+		return (1);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ast	*root;
-	t_token	*tokens;
-	t_env	*env;
-	char	*input;
+	t_env				*env;
+	char				*input;
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
 	(void)argc;
 	(void)**argv;
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = 0;
-	sa_int.sa_handler = handle_sigint;
-	sigaction(SIGINT, &sa_int, NULL);
-	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_flags = 0;
-	sa_quit.sa_handler = SIG_IGN; 
-	sigaction(SIGQUIT, &sa_quit, NULL);
+	prepare_signals(&sa_int, &sa_quit);
 	env = ft_init_env(envp);
 	input = NULL;
 	while (1)
 	{
 		g_signal_number = 0;
 		input = readline("$> ");
-		if (input == NULL )
-		{
-			printf("EOF...Quiting!");
-			break ;
-		}
-		if (ft_strcmp(input, "exit") == 0)
+		if (handle_exit(input) == 1)
 			break ;
 		add_history(input);
-		tokens = ft_new_token_node();
-		ft_populate_token_list(tokens, input);
-		root = parser(tokens);
-		// print_ast(root);
-		execute_ast(root, env, &sa_quit);
-		free(input);
-		ft_free_token_list(tokens);
-		cleanup(root);
-		rl_on_new_line();
+		parse_execute(input, env, &sa_quit);
 	}
 	ft_free_env(env);
 	rl_clear_history();

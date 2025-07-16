@@ -6,14 +6,15 @@
 #include <readline/readline.h>
 #include "built-in/builtins.h"
 
-int	tests(int argc, char **argv, char **envp);
+extern volatile sig_atomic_t	g_signal_number;
 
 typedef enum e_sigquit
 {
 	IGNORE,
 	HANDLE
-} 			t_sigquit;
+}			t_sigquit;
 
+int		tests(int argc, char **argv, char **envp);
 void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_quit);
 char	*execute_heredoc(t_ast *node, long redirc);
 char	*execute_heredoc(t_ast *node, long redirc);
@@ -28,5 +29,7 @@ void	handle_parent(int pipe_fd[2], int left_child, \
 						int right_child, int status);
 void	handle_execution_sigint(int sig);
 void	handle_interactive_sigint(int sig);
-void quit_handler(int sig);
-void signal_switch(t_sigquit status, struct sigaction *sa_quit);
+void	quit_handler(int sig);
+void	signal_switch(t_sigquit status, struct sigaction *sa_quit);
+void	handle_sigint(int sig);
+void	prepare_signals(struct sigaction *sa_int, struct sigaction *sa_quit);

@@ -29,13 +29,12 @@ long	count_args(t_token *token)
 	return (result * sizeof(char *));
 }
 
-void	cleanup(t_ast *root)
+void	ast_cleanup(t_ast *root)
 {
 	if (!root)
 		return ;
-
-	cleanup(root->left);
-	cleanup(root->right);
+	ast_cleanup(root->left);
+	ast_cleanup(root->right);
 	// printf("DEBUG: Freeing AST Node at address:   %p\n", (void *)root);
 	if (root->type == COMMAND_NODE)
 	{
@@ -47,4 +46,14 @@ void	cleanup(t_ast *root)
 			free(root->data.command_node.args);
 	}
 	free(root);
+}
+
+void	cleanup(t_ast *root, char *input, t_token *tokens)
+{
+	if (input)
+		free(input);
+	if (tokens)
+	ft_free_token_list(tokens);
+	if (root)
+	ast_cleanup(root);
 }
