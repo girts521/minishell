@@ -19,14 +19,6 @@ void	execute_simple_command(t_ast *node, t_env *env)
 	builtins_check = 0;
 	handle_redirs(node);
 	args = node->data.command_node.args;
-	// int i = 0;
-	// while(1)
-	// {
-	// 	if (!args[i])
-	// 		break ;
-	// 	ft_printf("%s\n", args[i]);
-	// 	i++;
-	// }
 	builtins_check = ft_is_builtin(args[0]);
 	if (builtins_check != 0)
 		ft_select_builtin(args, env, builtins_check);
