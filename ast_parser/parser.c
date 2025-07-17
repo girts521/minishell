@@ -10,6 +10,8 @@ t_ast	*parser(t_token *tokens)
 	t_token	*token_head;
 	t_ast	*root;
 
+	if (!tokens || tokens->type == TOKEN_EOF)
+		return (NULL);
 	current_node = create_ast_node();
 	root = current_node;
 	token_head = tokens;
@@ -19,7 +21,8 @@ t_ast	*parser(t_token *tokens)
 	while (tokens)
 	{
 		// ft_expand_var(tokens, env); to create!!
-		//validate_token(tokens, previous_token, root, token_head);
+		if (validate_token(tokens, previous_token) == 1)
+			return (NULL);
 		if (tokens->type == TOKEN_EOF)
 			break ;
 		if (tokens->type >= 0 && tokens->type <= 2)
