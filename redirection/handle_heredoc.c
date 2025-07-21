@@ -1,65 +1,94 @@
 #include "../minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-void heredoc_cleanup(t_list **dest_cleanup)
+void	heredoc_cleanup(t_list **dest_cleanup)
 {
-	t_list *current_node;
+	t_list	*current_node;
+	t_list	*next_node;
 
 	current_node = *dest_cleanup;
-	while (current_node)
+	next_node = NULL;
+	while (current_node != NULL)
 	{
-		unlink(current_node->content);
-		free(current_node->content);
-		current_node = current_node->next;
+		next_node = current_node->next;
+		unlink((char *)current_node->content);
+		free((char *)current_node->content);
+		free(current_node);
+		current_node = next_node;
 	}
 }
 
-void handle_heredoc(t_ast *ast, t_list **dest_cleanup)
+void	write_temp_file(t_ast *node, int temp_file, int redirc)
 {
-//	int heredoc_counter;
-	int i;
-	char *dest;
+	char	*delimiter;
+	char	*line;
+	int		delimiter_len;
 
-	//heredoc_counter = 0;
+	delimiter = node->data.command_node.redir_dest[redirc];
+	delimiter_len = ft_strlen(delimiter);
+	while (1)
+	{
+		line = get_next_line(0);
+		if (!line)
+		{
+			perror("delimiter was not found!");
+			break ;
+		}
+		if (ft_strlen(line) == delimiter_len + 1 && \
+			ft_strncmp(line, delimiter, delimiter_len) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(temp_file, line, ft_strlen(line));
+		free(line);
+	}
+	close(temp_file);
+}
+
+char	*execute_heredoc(t_ast *node, long redirc)
+{
+	char	*dest;
+	int		temp_file;
+
+	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
+	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, 0644);
+	if (temp_file == -1)
+	{
+		free(dest);
+		perror("Failed to open a temp file");
+		return (NULL);
+	}
+	write_temp_file(node, temp_file, redirc);
+	return (dest);
+}
+
+void	handle_heredoc(t_ast *ast, t_list **dest_cleanup)
+{
+//	int		heredoc_counter;
+	int		i;
+	char	*dest;
+
+//	heredoc_counter = 0;
 	if (!ast)
-		return;
+		return ;
 	if (ast->data.command_node.redirc)
 	{
 		i = 0;
-		while (ast->data.command_node.redirection[i])
+		while (i < ast->data.command_node.redirc)
 		{
 			if (ast->data.command_node.redirection[i] == REDIR_HEREDOC)
 			{
-				dest = execute_heredoc(ast,i);
+				dest = execute_heredoc(ast, i);
 				ast->data.command_node.redirection[i] = REDIR_IN;
 				ast->data.command_node.redir_dest[i] = dest;
-				//add the dest to some linked list that will be freed later
 				ft_lstadd_back(dest_cleanup, ft_lstnew(dest));
-			//	heredoc_counter++;
-			}	
+//				heredoc_counter++;
+			}
 			i++;
 		}
-	}	
+	}
 	handle_heredoc(ast->left, dest_cleanup);
 	handle_heredoc(ast->right, dest_cleanup);
-}
-
-char  *execute_heredoc(t_ast *node, long redirc)
-{
-	char *delimiter;
-	char *line;
-	int temp_file;
-	char *dest;
-
-	mode_t mode = 0644;
-	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
-	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, mode);
-	delimiter = node->data.command_node.redir_dest[redirc];
-	line = get_next_line(0);
-	while (ft_strncmp(line, delimiter, ft_strlen(delimiter)) != 0)
-	{
-		write(temp_file, line, ft_strlen(line));		
-		line = get_next_line(0);
-	}
-	close(temp_file);
-	return (dest);
 }
