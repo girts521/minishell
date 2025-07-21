@@ -1,12 +1,16 @@
-#include "libft/basic/basic.h"
-#include "libft/get_next_line/get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_ast.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/21 17:19:24 by mattiamagri       #+#    #+#             */
+/*   Updated: 2025/07/21 17:19:38 by mattiamagri      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 void	execute_simple_command(t_ast *node, t_env *env)
 {

@@ -1,10 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/21 17:20:10 by mattiamagri       #+#    #+#             */
+/*   Updated: 2025/07/21 17:27:58 by mattiamagri      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "ast_parser/ast_parser.h"
+# include "built-in/builtins.h"
+# include "enviroment/enviroment.h"
+# include "libft/libft.h"
+# include "tokenizer/token.h"
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
-# include "ast_parser/ast_parser.h"
 # include <readline/readline.h>
-# include "built-in/builtins.h"
+# include <readline/history.h>
+# include <errno.h>
+# include <signal.h>
+# include <fcntl.h>
 
 void execute_ast(t_ast *root, t_env *env);
 char *execute_heredoc(t_ast *node, long redirc);
@@ -15,3 +38,5 @@ void handle_redirs(t_ast *node);
 char	*ft_get_command_path(t_env *env, char *cmd);
 void	ft_expand_var(t_token *token, t_env *env);
 void	ft_print_env(t_env *env);
+
+#endif
