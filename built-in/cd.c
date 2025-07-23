@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:07:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/07 16:54:08 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:29:05 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_target_path(char *arg, t_env *env)
 			env = env->next;
 			if (!env)
 			{
-				ft_printf("minishell: cd: HOME not set\n");
+				ft_putendl_fd("minishell: cd: HOME not set", 2);
 				return (NULL);
 			}
 		}
@@ -78,7 +78,7 @@ int	ft_cd(char **args, t_env *env)
 
 	if (args[2])
 	{
-		ft_printf("minishell: cd: too many arguments\n");
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (1);
 	}
 	target = ft_target_path(args[1], env);

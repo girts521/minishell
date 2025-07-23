@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:47:44 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/17 17:09:56 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 18:12:54 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,12 @@ void	handle_sigint(int sig)
 	(void)sig;
 	g_signal_number = sig;
 	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if ((isatty(STDIN_FILENO) && rl_readline_state & RL_STATE_READCMD))
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void	prepare_signals(struct sigaction *sa_int, struct sigaction *sa_quit)

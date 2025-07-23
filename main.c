@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:31:41 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/17 16:49:00 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:12:44 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 volatile sig_atomic_t	g_signal_number = 0;
 
-void	parse_execute(char *input, t_env *env, struct sigaction *sa_quit)
+void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 {
 	t_ast	*root;
 	t_token	*tokens;
 
 	tokens = ft_new_token_node();
 	ft_populate_token_list(tokens, input);
-	ft_expand_var(tokens, env);
+	ft_expand_var(tokens, shell);
 	root = parser(tokens);
 	if (!root || !tokens)
 	{
@@ -29,7 +29,7 @@ void	parse_execute(char *input, t_env *env, struct sigaction *sa_quit)
 		return ;
 	}
 	// print_ast(root);
-	execute_ast(root, env, sa_quit);
+	execute_ast(root, shell, sa_quit);
 	cleanup(root, input, tokens);
 	rl_on_new_line();
 }
@@ -48,7 +48,7 @@ int	handle_exit(char *input)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env				*env;
+	t_shell				*shell;
 	char				*input;
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
@@ -56,7 +56,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)**argv;
 	prepare_signals(&sa_int, &sa_quit);
-	env = ft_init_env(envp);
+	shell = malloc(sizeof(t_shell));
+	shell->env = ft_init_env(envp);
+	shell->last_exit_code = 0;
 	input = NULL;
 	while (1)
 	{
@@ -65,9 +67,10 @@ int	main(int argc, char **argv, char **envp)
 		if (handle_exit(input) == 1)
 			break ;
 		add_history(input);
-		parse_execute(input, env, &sa_quit);
+		parse_execute(input, shell, &sa_quit);
 	}
-	ft_free_env(env);
+	ft_free_env(shell->env);
+	free(shell);
 	clear_history();
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:44:24 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/07 16:47:22 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:48:08 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,25 @@ void	ft_help_unset(char *arg, t_env **env)
 	}
 }
 
-void	ft_unset(char **args, t_env **env)
+int	ft_unset(char **args, t_env **env)
 {
 	int	i;
-	int	silence;
+	int	status;
 
-	silence = 0;
+	status = 0;
 	i = 1;
 	while (args[i])
 	{
 		if (ft_controll_s_token(args[i]) == 1)
 		{
-			if (silence == 0)
-			{
-				ft_printf("unset: %s: invalid parameter name", args[i]);
-				silence++;	
-			}
-			i++;
-			continue ;
+			ft_putstr_fd("minishell: unset: `", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putendl_fd("': not a valid identifier", 2);
+			status = 1;
 		}
-		ft_help_unset(args[i], env);
+		else
+			ft_help_unset(args[i], env);
 		i++;
 	}
+	return (status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:41:14 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/08 17:57:38 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/23 16:32:30 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,20 @@ int	ft_is_builtin(char *cmd)
 	return (0);
 }
 
-void	ft_select_builtin(char **args, t_env *env, int builtins_check)
+void	ft_select_builtin(char **args, t_shell *shell, int builtins_check)
 {
 	if (builtins_check == 1)
 		ft_echo(args);
 	else if (builtins_check == 2)
-		ft_cd(args, env);
+		shell->last_exit_code = ft_cd(args, shell->env);
 	else if (builtins_check == 3)
 		ft_pwd();
 	else if (builtins_check == 4)
-		ft_export(args, env);
+		shell->last_exit_code = ft_export(args, shell->env);
 	else if (builtins_check == 5)
-		ft_unset(args, &env);
+		shell->last_exit_code = ft_unset(args, &shell->env);
 	else if (builtins_check == 6)
-		ft_env(args, env);
+		shell->last_exit_code = ft_env(args, shell->env);
 	else if (builtins_check == 7)
-		ft_exit(args, env);
+		shell->last_exit_code = ft_exit(args, shell);
 }

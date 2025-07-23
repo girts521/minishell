@@ -6,33 +6,28 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:35:26 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/07 16:44:55 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:55:12 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_controll_token(char **args)
+int	ft_controll_token(char *arg)
 {
 	int	i;
-	int	y;
 
-	y = 1;
-	while (args[y])
+	if (!arg || (arg[0] != '_' && !ft_isalpha(arg[0])))
+		return (0);
+	i = 1;
+	while (arg[i] && arg[i] != '=')
 	{
-		if (args[y][0] != '_' && ft_isalpha(args[y][0]) != 1)
-			return (1);
-		i = 1;
-		while (args[y][i] != '\0' && args[y][i] != '=')
-		{
-			if (args[y][i] != '_' && ft_isalnum(args[y][i]) != 1)
-				return (1);
-			i++;
-		}
-		y++;
+		if (arg[i] != '_' && !ft_isalnum(arg[i]))
+			return (0);
+		i++;
 	}
-	return (0);
+	return (1);
 }
+
 
 int	ft_envlst_size(t_env *env)
 {
@@ -45,4 +40,17 @@ int	ft_envlst_size(t_env *env)
 		env = env->next;
 	}
 	return (len);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s)
+		return;
+	write(fd, s, ft_strlen(s));
+}
+
+void	ft_putendl_fd(char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
+	write(fd, "\n", 1);
 }

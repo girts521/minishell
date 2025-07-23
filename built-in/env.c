@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/16 19:17:12 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:30:34 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ int	ft_env_help(char **args, t_env *env)
 	}
 	if (execve(command, args, envp) == -1)
 	{
-		ft_printf("minishell: env: '%s': No such file or directory\n", args[1]);
+		ft_putstr_fd("minishell: env: '", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putendl_fd("': No such file or directory", 2);
 		free(command);
 		ft_free_pointertopointer(envp);
 		return(127);
@@ -81,7 +83,7 @@ int	ft_env(char **args, t_env *env)
 		if (check == 1)
 			return (1);
 		else if (check == 127)
-			exit(127);
+			return (127);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:00:40 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/16 17:46:56 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:03:22 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_expansion(t_token *token, char *key, char *value)
 	free(post);
 }
 
-void	ft_expand_var(t_token *token, t_env *env)
+void	ft_expand_var(t_token *token, t_shell *shell)
 {
 	int		y;
 	int		key_len;
@@ -80,11 +80,21 @@ void	ft_expand_var(t_token *token, t_env *env)
 			y = ft_isin('$', token->value);
 			while (y != -1)
 			{
-				key_len = ft_len_of_key(token->value + y + 1);
-				key = ft_strndup(token->value + y + 1, key_len);
-				value = ft_is_in_env(env, key);
-				if (value)
+				if (token->value[y + 1] == '?')
+				{
+					key = strdup("?");
+					value = ft_itoa(shell->last_exit_code);
 					ft_expansion(token, key, value);
+					free(value);
+				}
+				else
+				{
+					key_len = ft_len_of_key(token->value + y + 1);
+					key = ft_strndup(token->value + y + 1, key_len);
+					value = ft_is_in_env(shell->env, key);
+					if (value)
+						ft_expansion(token, key, value);
+				}
 				free(key);
 				y = ft_isin('$', token->value);
 			}

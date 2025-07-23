@@ -6,13 +6,13 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:25:21 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/21 17:25:31 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:08:36 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_simple_command(t_ast *node, t_env *env)
+void	execute_simple_command(t_ast *node, t_shell *shell)
 {
 	char	**args;
 	char	**envp;
@@ -22,32 +22,28 @@ void	execute_simple_command(t_ast *node, t_env *env)
 	builtins_check = 0;
 	handle_redirs(node);
 	args = node->data.command_node.args;
-	// int i = 0;
-	// while(1)
-	// {
-	// 	if (!args[i])
-	// 		break ;
-	// 	ft_printf("str:%s\n", args[i]);
-	// 	i++;
-	// }
 	builtins_check = ft_is_builtin(args[0]);
 	if (builtins_check != 0)
-		ft_select_builtin(args, env, builtins_check);
+		ft_select_builtin(args, shell, builtins_check);
 	else
 	{
-		command = ft_get_command_path(env, node->data.command_node.value);
+		command = ft_get_command_path(shell->env, node->data.command_node.value);
 		if (!command)
+		{
+			shell->last_exit_code = 127;
 			exit(127);
-		envp = ft_env_to_envp(env);
+		}
+		envp = ft_env_to_envp(shell->env);
 		execve(command, args, envp);
 		ft_free_pointertopointer(envp);
 		free(command);
 	}
 	command = NULL;
+	shell->last_exit_code = 0;
 	exit(0);
 }
 
-void	execute_pipe(t_ast *root, t_env *env)
+void	execute_pipe(t_ast *root, t_shell *shell)
 {
 	int	left_child;
 	int	right_child;
@@ -64,19 +60,19 @@ void	execute_pipe(t_ast *root, t_env *env)
 	if (left_child == 0)
 	{
 		handle_children(0, 1, pipe_fd);
-		execute_next_node(root, env, "left");
+		execute_next_node(root, shell, "left");
 	}
 	right_child = fork();
 	if (right_child == 0)
 	{
 		handle_children(1, 0, pipe_fd);
-		execute_next_node(root, env, "right");
+		execute_next_node(root, shell, "right");
 	}
 	if (left_child > 0 && right_child > 0)
 		handle_parent(pipe_fd, left_child, right_child, status);
 }
 
-void	execute_single_command(t_ast *root, t_env *env, int *status)
+void	execute_single_command(t_ast *root, t_shell *shell, int *status)
 {
 	char	**args;
 	int		builtin_code;
@@ -87,14 +83,14 @@ void	execute_single_command(t_ast *root, t_env *env, int *status)
 	if (builtin_code == 2 || builtin_code == 4 || \
 			builtin_code == 5 || builtin_code == 7)
 	{
-		ft_select_builtin(args, env, builtin_code);
+		ft_select_builtin(args, shell, builtin_code);
 		return ;
 	}
 	child = fork();
 	if (child == 0)
 	{
 		handle_redirs(root);
-		execute_simple_command(root, env);
+		execute_simple_command(root, shell);
 	}
 	else if (child > 0)
 		waitpid(child, status, 0);
@@ -104,7 +100,7 @@ void	execute_single_command(t_ast *root, t_env *env, int *status)
 }
 
 void	prepare_pipe(struct sigaction *sa_quit, \
-					int *status, t_ast *root, t_env *env)
+					int *status, t_ast *root, t_shell *shell)
 {
 	int	pipe_child;
 
@@ -113,14 +109,14 @@ void	prepare_pipe(struct sigaction *sa_quit, \
 	pipe_child = fork();
 	if (pipe_child == 0)
 	{
-		execute_pipe(root, env);
+		execute_pipe(root, shell);
 		exit(0);
 	}
 	else if (pipe_child > 0)
 		waitpid(pipe_child, status, 0);
 }
 
-void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_quit)
+void	execute_ast(t_ast *root, t_shell *shell, struct sigaction *sa_quit)
 {
 	int		status;
 	t_list	*dest_cleanup;
@@ -130,11 +126,11 @@ void	execute_ast(t_ast *root, t_env *env, struct sigaction *sa_quit)
 		return ;
 	handle_heredoc(root, &dest_cleanup);
 	if (root->type == PIPE_NODE)
-		prepare_pipe(sa_quit, &status, root, env);
+		prepare_pipe(sa_quit, &status, root, shell);
 	else if (root->type == COMMAND_NODE)
 	{
 		signal_switch(HANDLE, sa_quit);
-		execute_single_command(root, env, &status);
+		execute_single_command(root, shell, &status);
 		signal_switch(IGNORE, sa_quit);
 	}
 	heredoc_cleanup(&dest_cleanup);

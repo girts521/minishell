@@ -6,13 +6,13 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:25:08 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/21 17:25:11 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/23 16:11:12 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_next_node(t_ast *root, t_env *env, char *direction)
+void	execute_next_node(t_ast *root, t_shell *shell, char *direction)
 {
 	t_ast	*next_node;
 
@@ -21,9 +21,10 @@ void	execute_next_node(t_ast *root, t_env *env, char *direction)
 	else
 		next_node = root->left;
 	if (next_node->type == PIPE_NODE)
-		execute_pipe(next_node, env);
+		execute_pipe(next_node, shell);
 	else
-		execute_simple_command(next_node, env);
+		execute_simple_command(next_node, shell);
+	shell->last_exit_code = 0;
 	exit(0);
 }
 
