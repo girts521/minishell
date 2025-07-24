@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:25:21 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/23 17:08:36 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/24 11:55:50 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	execute_simple_command(t_ast *node, t_shell *shell)
 		command = ft_get_command_path(shell->env, node->data.command_node.value);
 		if (!command)
 		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(args[0], 2);
+			ft_putendl_fd(": command not found", 2);
 			shell->last_exit_code = 127;
 			exit(127);
 		}

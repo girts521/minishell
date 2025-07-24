@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:04:38 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/16 19:18:21 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/24 12:14:46 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,16 @@ char	*ft_get_command_path(t_env *env, char *cmd)
 	char	*full_path;
 	int		i;
 
+	if (!cmd)
+		return (NULL);
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	paths = ft_split_paths(env);
-	if (!paths || !cmd)
+	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
