@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/16 20:36:39 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/26 16:18:52 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_echo(char **args)
 	int	i;
 	int	y;
 	int	no_nl;
-
+ 
 	no_nl = 0;
 	i = 1;
 	while (args[i][0] == '-')
@@ -33,17 +33,7 @@ void	ft_echo(char **args)
 	}
 	while (args[i])
 	{
-		if (ft_recogn_t(args[i]) == 1 || ft_recogn_t(args[i]) == 2)
-		{
-			int	y = 1;
-			while(args[i][y] != 34 && args[i][y] != 39)
-			{
-				ft_printf("%c", args[i][y]);
-				y++;
-			}
-		}
-		else
-			ft_printf("%s", args[i]);
+		ft_printf("%s", args[i]);
 		i++;
 		if (args[i])
 			ft_printf(" ");

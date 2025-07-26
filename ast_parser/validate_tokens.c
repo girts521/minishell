@@ -53,6 +53,12 @@ int	validate_redirection(t_token *token, t_token *previous_token)
 
 }
 
+int	validate_unclosedquotes()
+{
+	ft_putendl_fd("minishell: syntax error: unexpected EOF while looking for matching quote", 2);
+	return (1);
+}
+
 int	validate_token(t_token *token, t_token *previous_token)
 {
 	int result;
@@ -64,5 +70,7 @@ int	validate_token(t_token *token, t_token *previous_token)
 		result = validate_eof(token, previous_token);
 	else if (token->type > 3 && token->type < 8)
 		result = validate_redirection(token, previous_token);
+	else if (token->type == TOKEN_UNCLOSEDQUOTES)
+		result = validate_unclosedquotes();
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:00:40 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/23 17:03:22 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/07/26 15:16:04 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	ft_expand_var(t_token *token, t_shell *shell)
 	y = 0;
 	while(token)
 	{
-		if (token->type == TOKEN_WORD || token->type == TOKEN_SQUOTE)
+		if (token->type == TOKEN_WORD || token->type == TOKEN_DQUOTE)
 		{
 			y = ft_isin('$', token->value);
 			while (y != -1)
@@ -94,6 +94,8 @@ void	ft_expand_var(t_token *token, t_shell *shell)
 					value = ft_is_in_env(shell->env, key);
 					if (value)
 						ft_expansion(token, key, value);
+					else
+						ft_expansion(token, key, "");
 				}
 				free(key);
 				y = ft_isin('$', token->value);
