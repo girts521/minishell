@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:11:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/04 15:34:01 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/07/26 16:31:57 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ typedef enum e_token_type {
 	TOKEN_REDIRECT_OUT,	// >
 	TOKEN_APPEND,		// >>
 	TOKEN_HEREDOC,		// <<
-	TOKEN_EOF			// End marker (optional)
+	TOKEN_EOF,			// End marker (optional)
+	TOKEN_UNCLOSEDQUOTES
 } t_token_type;
 
 typedef struct s_token {

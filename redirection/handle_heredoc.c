@@ -66,11 +66,11 @@ char	*execute_heredoc(t_ast *node, long redirc)
 
 void	handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 {
-	int		heredoc_counter;
+//	int		heredoc_counter;
 	int		i;
 	char	*dest;
 
-	heredoc_counter = 0;
+//	heredoc_counter = 0;
 	if (!ast)
 		return ;
 	if (ast->data.command_node.redirc)
@@ -84,7 +84,7 @@ void	handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 				ast->data.command_node.redirection[i] = REDIR_IN;
 				ast->data.command_node.redir_dest[i] = dest;
 				ft_lstadd_back(dest_cleanup, ft_lstnew(dest));
-				heredoc_counter++;
+//				heredoc_counter++;
 			}
 			i++;
 		}

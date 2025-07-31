@@ -1,5 +1,15 @@
 NAME = minishell
 CC = cc
+
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+READLINE_INCLUDE = -I/opt/homebrew/opt/readline/include -I/usr/local/opt/readline/include
+READLINE_LIB = -L/opt/homebrew/opt/readline/lib -L/usr/local/opt/readline/lib
+
+CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser -Ibuilt-in $(READLINE_INCLUDE)
+LDFLAGS = $(READLINE_LIB) -L$(LIBFT_DIR) -lft -lreadline
+
 SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/parser_utils.c ast_parser/validate_tokens.c ast_parser/parser.c ast_parser/print_ast.c ast_parser/print_helpers.c \
 		tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c \
 		enviroment/enviroment.c enviroment/env_utilis.c \
@@ -9,15 +19,7 @@ SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/pars
 		utils_main.c ft_expantion.c \
 		signals.c
 		# tests.c
-
 OBJS := $(SRCS:.c=.o)
-
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
-
-CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser -Ibuilt-in
-LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 
 all: $(NAME)
 
@@ -41,5 +43,3 @@ fclean : clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
-
