@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:07:26 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/23 17:29:05 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/05 17:23:24 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,20 @@ int	ft_set_pwd(t_env *env)
 	return (0);
 }
 
-char	*ft_target_path(char *arg, t_env *env)
+char	*ft_find_home(t_env *env)
 {
 	char	*target;
 
-	if (!arg[1])
+	while (ft_strcmp(env->key, "HOME") != 0)
 	{
-		while (ft_strcmp(env->key, "HOME") != 0)
+		env = env->next;
+		if (!env)
 		{
-			env = env->next;
-			if (!env)
-			{
-				ft_putendl_fd("minishell: cd: HOME not set", 2);
-				return (NULL);
-			}
+			ft_putendl_fd("minishell: cd: HOME not set", 2);
+			return (NULL);
 		}
-		target = env->value;
 	}
-	else
-		target = arg;
+	target = env->value;
 	return (target);
 }
 
@@ -81,7 +76,9 @@ int	ft_cd(char **args, t_env *env)
 		ft_putendl_fd("minishell: cd: too many arguments", 2);
 		return (1);
 	}
-	target = ft_target_path(args[1], env);
+	if (!args[1])
+		args[1] = ft_find_home(env);
+	target = args[1];
 	if (!target)
 		return (1);
 	ft_set_oldpwd(env);

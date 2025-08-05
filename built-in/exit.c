@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:10:51 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/23 17:32:18 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/05 16:34:49 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	ft_exit(char **args, t_shell *shell)
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		ft_free_pointertopointer(args);
-		shell->last_exit_code = 255;
-		exit (255);
+		shell->last_exit_code = 2;
+		exit (2);
 	}
 	shell->last_exit_code = ft_help_math(args[1]);
 	ft_free_token_env(args, shell->env);
