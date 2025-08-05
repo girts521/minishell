@@ -107,7 +107,7 @@ void	prepare_pipe(struct sigaction *sa_quit, \
 {
 	int	pipe_child;
 
-	sa_quit->sa_handler = quit_handler; 
+	sa_quit->sa_handler = quit_handler;
 	sigaction(SIGQUIT, sa_quit, NULL);
 	pipe_child = fork();
 	if (pipe_child == 0)

@@ -28,7 +28,7 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 		cleanup(root, input, tokens);
 		return ;
 	}
-	// print_ast(root);
+	print_ast(root);
 	execute_ast(root, shell, sa_quit);
 	cleanup(root, input, tokens);
 	rl_on_new_line();
