@@ -44,6 +44,7 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 	}
 	// print_ast(root);
 	execute_ast(root, shell, sa_quit);
+	add_history(input);
 	cleanup(root, input, tokens);
 	rl_on_new_line();
 }
