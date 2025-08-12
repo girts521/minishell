@@ -34,6 +34,16 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 	rl_on_new_line();
 }
 
+int	handle_exit(char *input)
+{
+	if (input == NULL )
+	{
+		printf("EOF...Quiting!");
+		return (1);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell				*shell;
@@ -52,6 +62,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		g_signal_number = 0;
 		input = readline("$> ");
+		if (handle_exit(input) == 1)
+			break ;
 		add_history(input);
 		parse_execute(input, shell, &sa_quit);
 	}

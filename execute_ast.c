@@ -20,7 +20,11 @@ void	execute_simple_command(t_ast *node, t_shell *shell)
 	int		builtins_check;
 
 	builtins_check = 0;
-	handle_redirs(node);
+	if (handle_redirs(node) == 1)
+	{
+		shell->last_exit_code = 1;
+		exit(1);
+	}
 	args = node->data.command_node.args;
 	builtins_check = ft_is_builtin(args[0]);
 	if (builtins_check != 0)
@@ -95,7 +99,11 @@ void	execute_single_command(t_ast *root, t_shell *shell, int *status)
 	child = fork();
 	if (child == 0)
 	{
-		handle_redirs(root);
+		if (handle_redirs(root) == 1)
+		{
+			shell->last_exit_code = 1;
+			exit(1);
+		}
 		if (root->data.command_node.value)
 			execute_simple_command(root, shell);
 		else 

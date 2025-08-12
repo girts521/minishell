@@ -51,8 +51,10 @@ char	*execute_heredoc(t_ast *node, long redirc)
 {
 	char	*dest;
 	int		temp_file;
+	char 	*char_redir;
 
-	dest = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(redirc));
+	char_redir = ft_itoa(redirc);
+	dest = ft_strjoin("/tmp/minishell_heredoc_", char_redir);
 	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, 0644);
 	if (temp_file == -1)
 	{
@@ -61,6 +63,7 @@ char	*execute_heredoc(t_ast *node, long redirc)
 		return (NULL);
 	}
 	write_temp_file(node, temp_file, redirc);
+	free(char_redir);
 	return (dest);
 }
 

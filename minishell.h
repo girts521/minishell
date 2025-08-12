@@ -60,7 +60,7 @@ char	*execute_heredoc(t_ast *node, long redirc);
 char	*execute_heredoc(t_ast *node, long redirc);
 void	handle_heredoc(t_ast *ast, t_list **dest_cleanup);
 void	heredoc_cleanup(t_list **dest_cleanup);
-void	handle_redirs(t_ast *node);
+int		handle_redirs(t_ast *node);
 
 void	handle_execution_sigint(int sig);
 void	handle_interactive_sigint(int sig);
