@@ -144,7 +144,11 @@ void	execute_ast(t_ast *root, t_shell *shell, struct sigaction *sa_quit)
 		return ;
 	handle_heredoc(root, &dest_cleanup);
 	if (root->type == PIPE_NODE)
+	{
+		signal_switch(HANDLE, sa_quit);
 		prepare_pipe(sa_quit, &status, root, shell);
+		signal_switch(IGNORE, sa_quit);
+	}
 	else if (root->type == COMMAND_NODE)
 	{
 		signal_switch(HANDLE, sa_quit);
