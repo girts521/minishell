@@ -20,7 +20,7 @@ int	validate_pipe(t_token *token, t_token *previous_token)
 
 int	validate_eof(t_token *token, t_token *previous_token)
 {
-	if (previous_token->type > 2)
+	if (previous_token && previous_token->type > 2)
 	{
 		printf("Syntax error! The command has to \
 					end with a word like token!\n");

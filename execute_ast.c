@@ -148,6 +148,7 @@ void	execute_ast(t_ast *root, t_shell *shell, struct sigaction *sa_quit)
 	t_list	*dest_cleanup;
 
 	dest_cleanup = NULL;
+	status = 0;
 	if (!root)
 		return ;
 	handle_heredoc(root, &dest_cleanup);
