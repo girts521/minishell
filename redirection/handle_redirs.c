@@ -63,6 +63,26 @@ int	handle_redir_in(t_ast *node, long redirc)
 	return (0);
 }
 
+int	check_redir_type(t_redirection_type redir_type)
+{
+	if (redir_type == REDIR_IN)
+	{
+		if (handle_redir_in(node, redirc) == 1)
+			return (1);
+	}
+	else if (redir_type == REDIR_OUT)
+	{
+		if (handle_redir_out(node, redirc) == 1)
+			return (1);
+	}
+	else if (redir_type == REDIR_APPEND)
+	{
+		if (handle_redir_append(node, redirc) == 1)
+			return (1);
+	}
+	return (0);
+}
+
 int	handle_redirs(t_ast *node)
 {
 	t_redirection_type	redir_type;
@@ -74,21 +94,8 @@ int	handle_redirs(t_ast *node)
 	redir_type = node->data.command_node.redirection[redirc];
 	while (redir_type)
 	{
-		if (redir_type == REDIR_IN)
-		{
-			if (handle_redir_in(node, redirc) == 1)
-				return (1);
-		}
-		else if (redir_type == REDIR_OUT)
-		{
-			if(handle_redir_out(node, redirc) == 1)
-				return (1);
-		}
-		else if (redir_type == REDIR_APPEND)
-		{
-			if(handle_redir_append(node, redirc) == 1)
-				return (1);
-		}
+		if (check_redir_type(redir_type) == 1)
+			return (1);
 		redirc++;
 		redir_type = node->data.command_node.redirection[redirc];
 	}

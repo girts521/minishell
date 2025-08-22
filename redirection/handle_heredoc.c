@@ -61,7 +61,7 @@ char	*execute_heredoc(t_ast *node, long redirc)
 {
 	char	*dest;
 	int		temp_file;
-	char 	*char_redir;
+	char	*char_redir;
 
 	char_redir = ft_itoa(redirc);
 	dest = ft_strjoin("/tmp/minishell_heredoc_", char_redir);
