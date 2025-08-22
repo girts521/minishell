@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:35:53 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/08/07 14:37:34 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/22 18:10:25 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,27 @@ int	ft_is_valid_env_char(int c)
 		|| c == '_')
 		return (1);
 	return (0);
+}
+
+void	set_tokens(char *input, t_shell *shell)
+{
+	t_token	*tokens;
+	t_token	*current_token;
+	t_token	*previous_token;
+
+	tokens = ft_new_token_node();
+	ft_populate_token_list(tokens, input);
+	ft_expand_var(tokens, shell);
+	current_token = tokens;
+	previous_token = NULL;
+	while (current_token)
+	{
+		if (validate_token(current_token, previous_token) == 1)
+		{
+			cleanup(NULL, input, tokens);
+			return ;
+		}
+		previous_token = current_token;
+		current_token = current_token->next;
+	}
 }
