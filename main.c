@@ -6,7 +6,7 @@
 /*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:31:41 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/22 18:50:16 by gikarcev         ###   ########.fr       */
+/*   Updated: 2025/08/22 19:39:15 by gikarcev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	main_help(t_shell *shell, char *input, struct sigaction sa_quit)
 		validate_unclosedquotes();
 		rl_on_new_line();
 		free(input);
+		return (0);
 	}
 	parse_execute(input, shell, &sa_quit);
 	return (0);
