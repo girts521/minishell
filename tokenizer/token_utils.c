@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:07:20 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/26 16:37:16 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 15:09:29 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	ft_sdquote(t_token **token, char *line, t_token_type type)
 		i++;
 	if (line[i] == quote)
 	{
-		(*token)->type = type;	
+		(*token)->type = type;
 		i++;
-	}	
+	}
 	else
 		(*token)->type = TOKEN_UNCLOSEDQUOTES;
 	(*token)->next = ft_new_token_node();
@@ -102,10 +102,10 @@ int	ft_word(t_token **token, char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] != '\0' && line[i] != ' ' && line[i] != '\t' &&
-		(ft_recogn_t(line + i) == TOKEN_WORD ||
-		ft_recogn_t(line + i) == TOKEN_DQUOTE ||
-		ft_recogn_t(line + i) == TOKEN_SQUOTE))
+	while (line[i] != '\0' && line[i] != ' ' && line[i] != '\t'
+		&& (ft_recogn_t(line + i) == TOKEN_WORD
+			|| ft_recogn_t(line + i) == TOKEN_DQUOTE
+			|| ft_recogn_t(line + i) == TOKEN_SQUOTE))
 		i++;
 	(*token)->value = ft_no_quote_strndup(line, i);
 	if (!(*token)->value)

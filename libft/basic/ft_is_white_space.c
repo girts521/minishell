@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_is_white_space.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:32:09 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/15 16:35:41 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 14:44:16 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

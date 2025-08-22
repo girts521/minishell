@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:15:14 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/06/12 15:44:18 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/07 15:05:44 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	ft_select_token(t_token **token, char *line, t_token_type type)
 		if (move != 2)
 			return (-1);
 	}
-		else if (type == TOKEN_REDIRECT_IN ||
-		type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
+	else if (type == TOKEN_REDIRECT_IN
+		|| type == TOKEN_REDIRECT_OUT || type == TOKEN_PIPE)
 	{
 		move = ft_redir_pipe(token, line, type);
 		if (move != 1)
