@@ -18,7 +18,11 @@ void	execute_simple_command(t_ast *node, t_shell *shell)
 	int		builtins_check;
 
 	builtins_check = 0;
-	handle_redirs(node);
+	if (handle_redirs(node) == 1)
+	{
+		shell->last_exit_code = 1;
+		exit(1);
+	}
 	args = node->data.command_node.args;
 	builtins_check = ft_is_builtin(args[0]);
 	if (builtins_check != 0)
@@ -63,22 +67,38 @@ void	execute_single_command(t_ast *root, t_shell *shell, int *status)
 	int		builtin_code;
 	int		child;
 
-	args = root->data.command_node.args;
-	builtin_code = ft_is_builtin(args[0]);
-	if (builtin_code == 2 || builtin_code == 4 || \
-			builtin_code == 5 || builtin_code == 7)
+	if(root->data.command_node.value)
 	{
-		ft_select_builtin(args, shell, builtin_code);
-		return ;
+		args = root->data.command_node.args;
+		builtin_code = ft_is_builtin(args[0]);
+		if (builtin_code == 2 || builtin_code == 4 || \
+				builtin_code == 5 || builtin_code == 7)
+		{
+			ft_select_builtin(args, shell, builtin_code);
+			return ;
+		}
 	}
 	child = fork();
 	if (child == 0)
 	{
-		handle_redirs(root);
-		execute_simple_command(root, shell);
+		if (handle_redirs(root) == 1)
+		{
+			shell->last_exit_code = 1;
+			exit(1);
+		}
+		if (root->data.command_node.value)
+			execute_simple_command(root, shell);
+		else 
+			exit(0);
 	}
 	else if (child > 0)
+	{
 		waitpid(child, status, 0);
+		if (WIFEXITED(*status))
+			shell->last_exit_code = WEXITSTATUS(*status);
+		else if (WIFSIGNALED(*status))
+			shell->last_exit_code = 128 + WTERMSIG(*status);
+	}
 	else
 		perror("Error forking a child!\n");
 	rl_on_new_line();
@@ -98,7 +118,10 @@ void	prepare_pipe(struct sigaction *sa_quit, \
 		exit(0);
 	}
 	else if (pipe_child > 0)
+	{
 		waitpid(pipe_child, status, 0);
+		shell->last_exit_code = *status;
+	}
 }
 
 void	execute_ast(t_ast *root, t_shell *shell, struct sigaction *sa_quit)
@@ -107,11 +130,16 @@ void	execute_ast(t_ast *root, t_shell *shell, struct sigaction *sa_quit)
 	t_list	*dest_cleanup;
 
 	dest_cleanup = NULL;
+	status = 0;
 	if (!root)
 		return ;
 	handle_heredoc(root, &dest_cleanup);
 	if (root->type == PIPE_NODE)
+	{
+		signal_switch(HANDLE, sa_quit);
 		prepare_pipe(sa_quit, &status, root, shell);
+		signal_switch(IGNORE, sa_quit);
+	}
 	else if (root->type == COMMAND_NODE)
 	{
 		signal_switch(HANDLE, sa_quit);

@@ -83,5 +83,6 @@ t_token	*get_test_input_12_tokens(void);
 t_token	*get_test_input_13_tokens(void);
 t_token	*get_test_input_14_tokens(void);
 void	print_ast(t_ast *root);
+int		validate_unclosedquotes();
 
 #endif
