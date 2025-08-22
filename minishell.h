@@ -70,6 +70,6 @@ int		ft_is_valid_env_char(int c);
 int		ft_exceve_use(t_shell *shell, char **args, char *command_node_value);
 void	handle_child_in_single_command(t_ast *root, t_shell *shell);
 void	handle_parent_in_single_command(int child, int *status, t_shell *shell);
-void	set_tokens(char *input, t_shell *shell);
+void	set_tokens(char *input, t_shell *shell, t_token *tokens);
 
 #endif

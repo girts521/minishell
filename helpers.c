@@ -44,9 +44,8 @@ int	ft_is_valid_env_char(int c)
 	return (0);
 }
 
-void	set_tokens(char *input, t_shell *shell)
+void	set_tokens(char *input, t_shell *shell,	t_token	*tokens)
 {
-	t_token	*tokens;
 	t_token	*current_token;
 	t_token	*previous_token;
 

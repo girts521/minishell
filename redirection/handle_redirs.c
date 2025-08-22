@@ -63,7 +63,7 @@ int	handle_redir_in(t_ast *node, long redirc)
 	return (0);
 }
 
-int	check_redir_type(t_redirection_type redir_type)
+int	check_redir_type(t_redirection_type redir_type, t_ast *node, long redirc)
 {
 	if (redir_type == REDIR_IN)
 	{
@@ -94,7 +94,7 @@ int	handle_redirs(t_ast *node)
 	redir_type = node->data.command_node.redirection[redirc];
 	while (redir_type)
 	{
-		if (check_redir_type(redir_type) == 1)
+		if (check_redir_type(redir_type, node, redirc) == 1)
 			return (1);
 		redirc++;
 		redir_type = node->data.command_node.redirection[redirc];

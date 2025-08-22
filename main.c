@@ -19,7 +19,8 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 	t_ast	*root;
 	t_token	*tokens;
 
-	set_tokens(input, shell);
+	tokens = NULL;
+	set_tokens(input, shell, tokens);
 	root = parser(tokens);
 	if (!root || !tokens)
 	{

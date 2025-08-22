@@ -17,7 +17,8 @@ SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/pars
 		built-in/echo.c built-in/cd.c built-in/env.c built-in/exit.c built-in/export.c built-in/is_builtin.c built-in/pwd.c built-in/unset.c built-in/utils.c \
 		redirection/handle_heredoc.c redirection/handle_redirs.c \
 		utils_main.c ft_expantion.c helpers.c \
-		signals.c
+		signals.c single_command_utils.c
+
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
