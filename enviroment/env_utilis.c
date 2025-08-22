@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utilis.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:10:10 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/07 16:50:40 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 15:01:29 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_strch_i(char *str, char c)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -51,20 +51,20 @@ char	*ft_extract_value_env(char *env_str)
 	ptr = ft_strchr(env_str, '=');
 	if (!ptr)
 		return (ft_strdup(""));
-	value  = ft_strdup(ptr + 1);
+	value = ft_strdup(ptr + 1);
 	return (value);
 }
 
 void	ft_env_add_back(t_env **env, t_env *new)
 {
-	t_env *curr;
+	t_env	*curr;
 
 	if (!new)
 		return ;
 	if (!*env)
 	{
 		*env = new;
-		return;
+		return ;
 	}
 	curr = *env;
 	while (curr->next)

@@ -3,29 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expantion.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:00:40 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/26 15:16:04 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 14:25:48 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_is_valid_env_char(int c)
-{
-	if((c >= 'A' && c <= 'Z')
-		|| (c >= 'a' && c <= 'z')
-		|| (c >= '0' && c <= '9')
-		|| c == '_')
-		return (1);
-	return (0);
-}
-
 int	ft_len_of_key(char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i] && ft_is_valid_env_char(str[i]))
 		i++;
@@ -34,7 +24,7 @@ int	ft_len_of_key(char *str)
 
 char	*ft_is_in_env(t_env *env, char *key)
 {
-	while(env)
+	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
 			return (env->value);
@@ -43,16 +33,14 @@ char	*ft_is_in_env(t_env *env, char *key)
 	return (NULL);
 }
 
-void	ft_expansion(t_token *token, char *key, char *value)
+void	ft_expansion(t_token *token, char *key, char *value, int y)
 {
 	char	*pre;
 	char	*post;
 	char	*join_str;
 	char	*tmp;
-	int		y;
 	int		prekey_len;
 
-	y = ft_isin('$', token->value);
 	pre = ft_strndup(token->value, y);
 	tmp = ft_strjoin(pre, value);
 	prekey_len = ft_strlen(key) + y + 1;
@@ -65,41 +53,45 @@ void	ft_expansion(t_token *token, char *key, char *value)
 	free(post);
 }
 
-void	ft_expand_var(t_token *token, t_shell *shell)
+void	helping(t_shell *shell, t_token *token, int y)
 {
-	int		y;
 	int		key_len;
 	char	*value;
 	char	*key;
 
+	if (token->value[y + 1] == '?')
+	{
+		key = strdup("?");
+		value = ft_itoa(shell->last_exit_code);
+		ft_expansion(token, key, value, y);
+		free(value);
+	}
+	else
+	{
+		key_len = ft_len_of_key(token->value + y + 1);
+		key = ft_strndup(token->value + y + 1, key_len);
+		value = ft_is_in_env(shell->env, key);
+		if (value)
+			ft_expansion(token, key, value, y);
+		else
+			ft_expansion(token, key, "", y);
+	}
+	free(key);
+}
+
+void	ft_expand_var(t_token *token, t_shell *shell)
+{
+	int		y;
+
 	y = 0;
-	while(token)
+	while (token)
 	{
 		if (token->type == TOKEN_WORD || token->type == TOKEN_DQUOTE)
 		{
 			y = ft_isin('$', token->value);
-			while (y != -1)
-			{
-				if (token->value[y + 1] == '?')
-				{
-					key = strdup("?");
-					value = ft_itoa(shell->last_exit_code);
-					ft_expansion(token, key, value);
-					free(value);
-				}
-				else
-				{
-					key_len = ft_len_of_key(token->value + y + 1);
-					key = ft_strndup(token->value + y + 1, key_len);
-					value = ft_is_in_env(shell->env, key);
-					if (value)
-						ft_expansion(token, key, value);
-					else
-						ft_expansion(token, key, "");
-				}
-				free(key);
-				y = ft_isin('$', token->value);
-			}
+			if (y != -1)
+				helping(shell, token, y);
+			y = ft_isin('$', token->value);
 		}
 		token = token->next;
 	}

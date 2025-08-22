@@ -1,30 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 15:10:17 by mmagrin           #+#    #+#             */
+/*   Updated: 2025/08/07 15:24:29 by mmagrin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast_parser.h"
 #include "tokenizer/token.h"
 
 // Helper function to create a new token
 // This function allocates memory for the token and its value.
 // Remember to free this memory later.
-t_token *create_token(t_token_type type, const char *value_str) {
-    t_token *new_token = (t_token *)malloc(sizeof(t_token));
-    if (!new_token) {
-        perror("Failed to allocate token");
-        // In a real minishell, you'd handle this more gracefully
-        exit(EXIT_FAILURE);
-    }
+t_token	*create_token(t_token_type type, const char *value_str)
+{
+	t_token	*new_token;
 
-    new_token->type = type;
-    if (value_str) {
-        new_token->value = strdup(value_str); // strdup allocates memory for the string copy
-        if (!new_token->value) {
-            perror("Failed to allocate token value");
-            free(new_token);
-            exit(EXIT_FAILURE);
-        }
-    } else {
-        new_token->value = NULL;
-    }
-    new_token->next = NULL;
-    return new_token;
+	new_token = (t_token *)malloc(sizeof(t_token));
+	if (!new_token)
+	{
+		perror("Failed to allocate token");
+		exit(EXIT_FAILURE);
+	}
+	new_token->type = type;
+	if (value_str)
+	{
+		new_token->value = strdup(value_str);
+		if (!new_token->value)
+		{
+			perror("Failed to allocate token value");
+			free(new_token);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+		new_token->value = NULL;
+	new_token->next = NULL;
+	return (new_token);
 }
 
 // --- Mock Lexer Output Functions ---
@@ -35,14 +51,17 @@ t_token *create_token(t_token_type type, const char *value_str) {
 // 2. TOKEN_WORD, value: "-l"
 // 3. TOKEN_WORD, value: "/tmp"
 // 4. TOKEN_EOF,   value: NULL
-t_token *get_test_input_1_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "ls");
-    head->next = create_token(TOKEN_WORD, "-l");
-    head->next->next = create_token(TOKEN_WORD, "/tmp");
-    head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
-    head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
-    head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_1_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "ls");
+	head->next = create_token(TOKEN_WORD, "-l");
+	head->next->next = create_token(TOKEN_WORD, "/tmp");
+	head->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+	head->next->next->next->next = create_token(TOKEN_WORD, "test.txt");
+	head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 // Test Input 2: echo "Hello $USER" 'no expansion here'
@@ -51,12 +70,15 @@ t_token *get_test_input_1_tokens() {
 // 2. TOKEN_STRING, value: "\"Hello $USER\"" (raw value, includes quotes)
 // 3. TOKEN_SQUOTE, value: "'no expansion here'" (raw value, includes quotes)
 // 4. TOKEN_EOF,    value: NULL
-t_token *get_test_input_2_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "echo");
-    head->next = create_token(TOKEN_DQUOTE, "\"Hello $USER\"");
-    head->next->next = create_token(TOKEN_SQUOTE, "'no expansion here'");
-    head->next->next->next = create_token(TOKEN_EOF, NULL); // End of the command
-    return head;
+t_token	*get_test_input_2_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "echo");
+	head->next = create_token(TOKEN_DQUOTE, "\"Hello $USER\"");
+	head->next->next = create_token(TOKEN_SQUOTE, "'no expansion here'");
+	head->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 // --- Mock Lexer Output Functions ---
@@ -72,16 +94,18 @@ t_token *get_test_input_2_tokens() {
 // 4. TOKEN_WORD,   value: "grep"
 // 5. TOKEN_STRING, value: "\"search\""
 // 6. TOKEN_EOF,    value: NULL
-t_token *get_test_input_3_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "cat");
-    head->next = create_token(TOKEN_WORD, "file.txt");
-    head->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next = create_token(TOKEN_DQUOTE, "\"search\"");
-    head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
-}
+t_token	*get_test_input_3_tokens(void)
+{
+	t_token	*head;
 
+	head = create_token(TOKEN_WORD, "cat");
+	head->next = create_token(TOKEN_WORD, "file.txt");
+	head->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next = create_token(TOKEN_WORD, "grep");
+	head->next->next->next->next = create_token(TOKEN_DQUOTE, "\"search\"");
+	head->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
+}
 // Test Input 4: grep "error" < log.txt >> errors.log
 // Purpose: Tests multiple redirections (input and append-output) on a single command.
 // Expected Token Sequence:
@@ -92,19 +116,22 @@ t_token *get_test_input_3_tokens() {
 // 5. TOKEN_APPEND,       value: ">>"
 // 6. TOKEN_WORD,         value: "errors.log"
 // 7. TOKEN_EOF,          value: NULL
-t_token *get_test_input_4_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "grep");
-    head->next = create_token(TOKEN_DQUOTE, "\"error\"");
-    head->next->next = create_token(TOKEN_REDIRECT_IN, "<");
-    head->next->next->next = create_token(TOKEN_WORD, "log.txt");
-    head->next->next->next->next = create_token(TOKEN_APPEND, ">>");
-    head->next->next->next->next->next = create_token(TOKEN_WORD, "errors.log");
-    head->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_4_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "grep");
+	head->next = create_token(TOKEN_DQUOTE, "\"error\"");
+	head->next->next = create_token(TOKEN_REDIRECT_IN, "<");
+	head->next->next->next = create_token(TOKEN_WORD, "log.txt");
+	head->next->next->next->next = create_token(TOKEN_APPEND, ">>");
+	head->next->next->next->next->next = create_token(TOKEN_WORD, "errors.log");
+	head->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 // Test Input 5: wc -l <<< END
-// Purpose: Tests the here-document redirection as specified in the subject. 
+// Purpose: Tests the here-document redirection as specified in the subject.
 // Note: Your subject uses '<<<', while the `e_token_type` enum has TOKEN_HEREDOC,
 // which is commonly associated with '<<'. Ensure your lexer correctly maps '<<<'
 // to TOKEN_HEREDOC to match the project requirements.
@@ -114,14 +141,18 @@ t_token *get_test_input_4_tokens() {
 // 3. TOKEN_HEREDOC, value: "<<<"
 // 4. TOKEN_WORD,    value: "END" (the delimiter)
 // 5. TOKEN_EOF,     value: NULL
-t_token *get_test_input_5_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "wc");
-    head->next = create_token(TOKEN_WORD, "-l");
-    head->next->next = create_token(TOKEN_HEREDOC, "<<<");
-    head->next->next->next = create_token(TOKEN_WORD, "END");
-    head->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_5_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "wc");
+	head->next = create_token(TOKEN_WORD, "-l");
+	head->next->next = create_token(TOKEN_HEREDOC, "<<<");
+	head->next->next->next = create_token(TOKEN_WORD, "END");
+	head->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
+
 
 // Test Input 6: cat < infile | grep "test" > outfile
 // Purpose: Tests a more complex chain involving both input/output redirection and a pipe.
@@ -136,32 +167,38 @@ t_token *get_test_input_5_tokens() {
 // 7. TOKEN_REDIRECT_OUT, value: ">"
 // 8. TOKEN_WORD,         value: "outfile"
 // 9. TOKEN_EOF,          value: NULL
-t_token *get_test_input_6_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "cat");
-    head->next = create_token(TOKEN_REDIRECT_IN, "<");
-    head->next->next = create_token(TOKEN_WORD, "infile");
-    head->next->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
-    head->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
-    head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
-    head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_6_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "cat");
+	head->next = create_token(TOKEN_REDIRECT_IN, "<");
+	head->next->next = create_token(TOKEN_WORD, "infile");
+	head->next->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next->next = create_token(TOKEN_WORD, "grep");
+	head->next->next->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
+	head->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+	head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
+	head->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 // Test Input 7: echo "Status was: $?"
-// Purpose: Tests variable expansion within double quotes, specifically the exit status variable '$?'. 
+// Purpose: Tests variable expansion within double quotes, specifically the exit status variable '$?'.
 // Your parser will need to know not to expand this, but the executor will.
 // For the lexer, it's just a string.
 // Expected Token Sequence:
 // 1. TOKEN_WORD,   value: "echo"
 // 2. TOKEN_STRING, value: "\"Status was: $?\""
 // 3. TOKEN_EOF,    value: NULL
-t_token *get_test_input_7_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "echo");
-    head->next = create_token(TOKEN_DQUOTE, "\"Status was: $?\"");
-    head->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_7_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "echo");
+	head->next = create_token(TOKEN_DQUOTE, "\"Status was: $?\"");
+	head->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 // --- New, More Complex Test Cases ---
@@ -172,18 +209,21 @@ t_token *get_test_input_7_tokens() {
  * It ensures that '< infile' is associated with 'grep' and '> outfile' with 'wc'.
  * Note: Placing input redirection before the command is valid in bash.
  */
-t_token *get_test_input_8_tokens() {
-    t_token *head = create_token(TOKEN_REDIRECT_IN, "<");
-    head->next = create_token(TOKEN_WORD, "infile");
-    head->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
-    head->next->next->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next->next->next = create_token(TOKEN_WORD, "wc");
-    head->next->next->next->next->next->next = create_token(TOKEN_WORD, "-l");
-    head->next->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
-    head->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
-    head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_8_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_REDIRECT_IN, "<");
+	head->next = create_token(TOKEN_WORD, "infile");
+	head->next->next = create_token(TOKEN_WORD, "grep");
+	head->next->next->next = create_token(TOKEN_DQUOTE, "\"test\"");
+	head->next->next->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next->next->next = create_token(TOKEN_WORD, "wc");
+	head->next->next->next->next->next->next = create_token(TOKEN_WORD, "-l");
+	head->next->next->next->next->next->next->next = create_token(TOKEN_REDIRECT_OUT, ">");
+	head->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "outfile");
+	head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 /**
@@ -191,20 +231,23 @@ t_token *get_test_input_8_tokens() {
  * @purpose Tests a longer pipeline with multiple pipes to ensure the
  * AST is built correctly as a linked series of pipe nodes.
  */
-t_token *get_test_input_9_tokens() {
-    t_token *head = create_token(TOKEN_WORD, "ls");
-    head->next = create_token(TOKEN_WORD, "-l");
-    head->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next = create_token(TOKEN_WORD, "grep");
-    head->next->next->next->next = create_token(TOKEN_DQUOTE, "\".c\"");
-    head->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next->next->next->next = create_token(TOKEN_WORD, "sort");
-    head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-r");
-    head->next->next->next->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
-    head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "cat");
-    head->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-e");
-    head->next->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
-    return head;
+t_token	*get_test_input_9_tokens(void)
+{
+	t_token	*head;
+
+	head = create_token(TOKEN_WORD, "ls");
+	head->next = create_token(TOKEN_WORD, "-l");
+	head->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next = create_token(TOKEN_WORD, "grep");
+	head->next->next->next->next = create_token(TOKEN_DQUOTE, "\".c\"");
+	head->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next->next->next->next = create_token(TOKEN_WORD, "sort");
+	head->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-r");
+	head->next->next->next->next->next->next->next->next = create_token(TOKEN_PIPE, "|");
+	head->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "cat");
+	head->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_WORD, "-e");
+	head->next->next->next->next->next->next->next->next->next->next->next = create_token(TOKEN_EOF, NULL);
+	return (head);
 }
 
 /**

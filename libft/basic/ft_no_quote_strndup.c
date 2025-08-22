@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_no_quote_strndup.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 15:58:12 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/26 16:04:01 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 14:43:20 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ char	*ft_no_quote_strndup(char *s, int n)
 	{
 		if (s[i] == 34 || s[i] == 39)
 		{
-			quote = s[i];
-			i++;
+			quote = s[i++];
 			while (i < n && s[i] != quote)
 				dst[j++] = s[i++];
 			if (i < n && s[i] == quote)

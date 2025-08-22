@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/23 17:30:34 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/06 18:23:37 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_env_help(char **args, t_env *env)
 	char	*command;
 	char	**envp;
 
-	command = ft_get_command_path(env, args[0]);
+	command = ft_get_commandpath(env, args[0]);
 	if (!command)
 		return (1);
 	envp = ft_env_to_envp(env);

@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 18:04:38 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/05 17:07:06 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/07 14:08:45 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,50 +21,66 @@ char	**ft_split_paths(t_env *env)
 		if (ft_strcmp(env->key, "PATH") == 0)
 		{
 			splitted_paths = ft_split(env->value, ':');
-			return(splitted_paths);
+			return (splitted_paths);
 		}
 		env = env->next;
 	}
 	return (NULL);
 }
 
-// int	ft_special_err(char *cmd)
-// {
-
-// }
-
-char	*ft_get_command_path(t_env *env, char *cmd)
+char	*ft_get_full_path(char *cmd, char **paths, int i)
 {
-	char	**paths;
-	char	*prefix;
 	char	*full_path;
-	int		i;
+	char	*prefix;
 
+	prefix = ft_strjoin(paths[i], "/");
+	full_path = ft_strjoin(prefix, cmd);
+	free(prefix);
+	if (access(full_path, X_OK) == 0)
+	{
+		ft_free_pointertopointer(paths);
+		return (full_path);
+	}
+	free(full_path);
+	return (NULL);
+}
+
+int	ft_controll_get_command(char *cmd)
+{
 	if (!cmd)
-		return (NULL);
+		return (1);
+	if (ft_strcmp(cmd, ".") == 0 || ft_strcmp(cmd, "..") == 0)
+		return (1);
 	if (ft_strchr(cmd, '/'))
 	{
-		// if (ft_special() == 1)
-		// 	return (NULL);
 		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
+			return (2);
+		return (1);
 	}
+	return (0);
+}
+
+char	*ft_get_commandpath(t_env *env, char *cmd)
+{
+	char	**paths;
+	char	*full_path;
+	int		i;
+	int		code;
+
+	code = ft_controll_get_command(cmd);
+	if (code == 1)
+		return (NULL);
+	if (code == 2)
+		return (ft_strdup(cmd));
 	paths = ft_split_paths(env);
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
-		prefix = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(prefix, cmd);
-		free(prefix);
-		if (access(full_path, X_OK) == 0)
-		{
-			ft_free_pointertopointer(paths);
+		full_path = ft_get_full_path(cmd, paths, i);
+		if (full_path)
 			return (full_path);
-		}
-		free(full_path);
 		i++;
 	}
 	ft_free_pointertopointer(paths);

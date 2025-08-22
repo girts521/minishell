@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:25:21 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/26 16:11:20 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/07 14:54:59 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void	execute_simple_command(t_ast *node, t_shell *shell)
 {
 	char	**args;
-	char	**envp;
-	char	*command;
 	int		builtins_check;
 
 	builtins_check = 0;
@@ -26,24 +24,8 @@ void	execute_simple_command(t_ast *node, t_shell *shell)
 	if (builtins_check != 0)
 		ft_select_builtin(args, shell, builtins_check);
 	else
-	{
-		command = ft_get_command_path(shell->env, node->data.command_node.value);
-		if (!command)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(args[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			shell->last_exit_code = 127;
-			exit(127);
-		}
-		envp = ft_env_to_envp(shell->env);
-		execve(command, args, envp);
-		ft_free_pointertopointer(envp);
-		free(command);
-	}
-	command = NULL;
-	shell->last_exit_code = 0;
-	exit(0);
+		exit(ft_exceve_use(shell, args, node->data.command_node.value));
+	exit(shell->last_exit_code);
 }
 
 void	execute_pipe(t_ast *root, t_shell *shell)
