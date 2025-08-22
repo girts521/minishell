@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:25:23 by gikarcev          #+#    #+#             */
+/*   Updated: 2025/08/22 17:25:24 by gikarcev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast_parser.h"
 
-//TODO:
-//validate the double and single token strings 
-//the variable expansion should be done here as well
 t_ast	*parser(t_token *tokens)
 {
 	t_ast	*current_node;
@@ -16,15 +25,8 @@ t_ast	*parser(t_token *tokens)
 	root = current_node;
 	token_head = tokens;
 	previous_token = NULL;
-	(void)token_head;
-	(void)previous_token;
 	while (tokens)
 	{
-		// ft_expand_var(tokens, env); to create!!
-		// if (validate_token(tokens, previous_token) == 1)
-		// {
-		// 	return (root);
-		// }
 		if (tokens->type == TOKEN_EOF)
 			break ;
 		if (tokens->type >= 0 && tokens->type <= 2)

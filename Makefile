@@ -10,7 +10,7 @@ READLINE_LIB = -L/opt/homebrew/opt/readline/lib -L/usr/local/opt/readline/lib
 CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser -Ibuilt-in $(READLINE_INCLUDE)
 LDFLAGS = $(READLINE_LIB) -L$(LIBFT_DIR) -lft -lreadline
 
-SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/parser_utils.c ast_parser/validate_tokens.c ast_parser/parser.c ast_parser/print_ast.c ast_parser/print_helpers.c \
+SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/parser_utils.c ast_parser/validate_tokens.c ast_parser/parser.c \
 		tokenizer/token.c tokenizer/token_utils.c tokenizer/free_token_list.c \
 		enviroment/enviroment.c enviroment/env_utilis.c \
 		execute_ast.c execute_utils.c \
@@ -18,7 +18,6 @@ SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/pars
 		redirection/handle_heredoc.c redirection/handle_redirs.c \
 		utils_main.c ft_expantion.c helpers.c \
 		signals.c
-		# tests.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)

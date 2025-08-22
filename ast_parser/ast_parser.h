@@ -1,11 +1,23 @@
-#include <stddef.h>
-#include <stdlib.h>
-#include "../libft/libft.h"
-#include "../tokenizer/token.h"
-#include "../enviroment/enviroment.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast_parser.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:24:54 by gikarcev          #+#    #+#             */
+/*   Updated: 2025/08/22 17:25:00 by gikarcev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef AST_PARSER_H
 # define AST_PARSER_H
+
+# include <stddef.h>
+# include <stdlib.h>
+# include "../libft/libft.h"
+# include "../tokenizer/token.h"
+# include "../enviroment/enviroment.h"
 
 typedef enum e_ast_node_type
 {
@@ -83,6 +95,6 @@ t_token	*get_test_input_12_tokens(void);
 t_token	*get_test_input_13_tokens(void);
 t_token	*get_test_input_14_tokens(void);
 void	print_ast(t_ast *root);
-int		validate_unclosedquotes();
+int		validate_unclosedquotes(void);
 
 #endif

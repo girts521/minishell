@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_tokens.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:25:30 by gikarcev          #+#    #+#             */
+/*   Updated: 2025/08/22 17:25:32 by gikarcev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast_parser.h"
 
 int	validate_pipe(t_token *token, t_token *previous_token)
@@ -50,18 +62,18 @@ int	validate_redirection(t_token *token, t_token *previous_token)
 		return (1);
 	}
 	return (0);
-
 }
 
-int	validate_unclosedquotes()
+int	validate_unclosedquotes(void)
 {
-	ft_putendl_fd("minishell: syntax error: unexpected EOF while looking for matching quote", 2);
+	ft_putendl_fd("minishell: syntax error: unexpected \
+				EOF while looking for matching quote", 2);
 	return (1);
 }
 
 int	validate_token(t_token *token, t_token *previous_token)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	if (token->type == TOKEN_PIPE)

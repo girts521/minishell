@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:25:07 by gikarcev          #+#    #+#             */
+/*   Updated: 2025/08/22 17:25:11 by gikarcev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ast_parser.h"
 
 //Creates a node with  empty values. 
@@ -8,7 +20,6 @@ t_ast	*create_ast_node(void)
 	t_ast	*node;
 
 	node = (t_ast *)safe_calloc(1, sizeof(t_ast));
-	// printf("DEBUG: Allocated AST Node at address: %p\n", (void *)node);
 	node->type = COMMAND_NODE;
 	node->left = NULL;
 	node->right = NULL;
@@ -35,7 +46,6 @@ void	ast_cleanup(t_ast *root)
 		return ;
 	ast_cleanup(root->left);
 	ast_cleanup(root->right);
-	// printf("DEBUG: Freeing AST Node at address:   %p\n", (void *)root);
 	if (root->type == COMMAND_NODE)
 	{
 		if (root->data.command_node.redir_dest)
@@ -53,7 +63,7 @@ void	cleanup(t_ast *root, char *input, t_token *tokens)
 	if (input)
 		free(input);
 	if (tokens)
-	ft_free_token_list(tokens);
+		ft_free_token_list(tokens);
 	if (root)
-	ast_cleanup(root);
+		ast_cleanup(root);
 }
