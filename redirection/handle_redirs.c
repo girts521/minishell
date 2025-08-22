@@ -1,8 +1,20 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_redirs.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:25:32 by mmagrin           #+#    #+#             */
+/*   Updated: 2025/08/22 17:42:02 by mmagrin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 int	handle_redir_append(t_ast *node, long redirc)
 {
-	char	*dest;	
+	char	*dest;
 	int		dest_fd;
 
 	dest = node->data.command_node.redir_dest[redirc];
@@ -19,7 +31,7 @@ int	handle_redir_append(t_ast *node, long redirc)
 
 int	handle_redir_out(t_ast *node, long redirc)
 {
-	char	*dest;	
+	char	*dest;
 	int		dest_fd;
 
 	dest = node->data.command_node.redir_dest[redirc];
@@ -36,7 +48,7 @@ int	handle_redir_out(t_ast *node, long redirc)
 
 int	handle_redir_in(t_ast *node, long redirc)
 {
-	char	*dest;	
+	char	*dest;
 	int		dest_fd;
 
 	dest = node->data.command_node.redir_dest[redirc];

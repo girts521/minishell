@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:44:24 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/26 16:18:08 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/22 17:23:06 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void	ft_help_unset(char *arg, t_env **env)
 {
 	t_env	*tmp;
 	t_env	*prev;
-	
+
 	prev = NULL;
 	tmp = *env;
 	while (tmp)
 	{
-		if(ft_strcmp(arg, tmp->key) == 0)
+		if (ft_strcmp(arg, tmp->key) == 0)
 		{
 			if (prev == NULL)
 				*env = tmp->next;

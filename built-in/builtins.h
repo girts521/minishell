@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:45:14 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/07/23 17:50:31 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/22 17:21:13 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <limits.h>
 
 typedef struct s_shell	t_shell;
-typedef struct s_env		t_env;
+typedef struct s_env	t_env;
 
 int		ft_is_builtin(char *cmd);
 void	ft_select_builtin(char **args, t_shell *shell, int builtins_check);

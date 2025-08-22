@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:31:41 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/07 14:37:28 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/22 17:42:56 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 		if (validate_token(current_token, previous_token) == 1)
 		{
 			cleanup(NULL, input, tokens);
-			return ; 
+			return ;
 		}
 		previous_token = current_token;
 		current_token = current_token->next;
@@ -42,7 +42,6 @@ void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 		cleanup(root, input, tokens);
 		return ;
 	}
-	// print_ast(root);
 	execute_ast(root, shell, sa_quit);
 	add_history(input);
 	cleanup(root, input, tokens);
@@ -77,7 +76,7 @@ int check_quotes(char *input)
 				j++;
 			if (input[j] && input[j] == search)
 				i = j;
-			else 
+			else
 				return (1);
 		}
 	}

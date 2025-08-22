@@ -1,6 +1,16 @@
-#include "../minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_heredoc.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/22 17:24:54 by mmagrin           #+#    #+#             */
+/*   Updated: 2025/08/22 17:25:04 by mmagrin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 void	heredoc_cleanup(t_list **dest_cleanup)
 {
@@ -69,11 +79,9 @@ char	*execute_heredoc(t_ast *node, long redirc)
 
 void	handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 {
-//	int		heredoc_counter;
 	int		i;
 	char	*dest;
 
-//	heredoc_counter = 0;
 	if (!ast)
 		return ;
 	if (ast->data.command_node.redirc)
@@ -87,7 +95,6 @@ void	handle_heredoc(t_ast *ast, t_list **dest_cleanup)
 				ast->data.command_node.redirection[i] = REDIR_IN;
 				ast->data.command_node.redir_dest[i] = dest;
 				ft_lstadd_back(dest_cleanup, ft_lstnew(dest));
-//				heredoc_counter++;
 			}
 			i++;
 		}

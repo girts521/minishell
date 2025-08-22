@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:31:57 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/07 17:18:35 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/22 17:21:03 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_pwd(void)
 {
 	char	*cwd;
-	
+
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
