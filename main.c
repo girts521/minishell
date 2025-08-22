@@ -14,23 +14,21 @@
 
 volatile sig_atomic_t	g_signal_number = 0;
 
-void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
+void    parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 {
-	t_ast	*root;
-	t_token	*tokens;
-
-	tokens = NULL;
-	set_tokens(input, shell, tokens);
-	root = parser(tokens);
-	if (!root || !tokens)
-	{
-		cleanup(root, input, tokens);
-		return ;
-	}
-	execute_ast(root, shell, sa_quit);
-	add_history(input);
-	cleanup(root, input, tokens);
-	rl_on_new_line();
+    t_ast   *root;
+    t_token *tokens;
+    tokens = set_tokens(input, shell);
+    root = parser(tokens);
+    if (!root || !tokens)
+    {
+        cleanup(root, input, tokens);
+        return ;
+    }
+    execute_ast(root, shell, sa_quit);
+    add_history(input);
+    cleanup(root, input, tokens);
+    rl_on_new_line();
 }
 
 int	handle_exit(char *input)

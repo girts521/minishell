@@ -44,24 +44,26 @@ int	ft_is_valid_env_char(int c)
 	return (0);
 }
 
-void	set_tokens(char *input, t_shell *shell,	t_token	*tokens)
+t_token *set_tokens(char *input, t_shell *shell)
 {
-	t_token	*current_token;
-	t_token	*previous_token;
-
-	tokens = ft_new_token_node();
-	ft_populate_token_list(tokens, input);
-	ft_expand_var(tokens, shell);
-	current_token = tokens;
-	previous_token = NULL;
-	while (current_token)
-	{
-		if (validate_token(current_token, previous_token) == 1)
-		{
-			cleanup(NULL, input, tokens);
-			return ;
-		}
-		previous_token = current_token;
-		current_token = current_token->next;
-	}
+    t_token *tokens;
+    t_token *current_token;
+    t_token *previous_token;
+    tokens = ft_new_token_node();
+    ft_populate_token_list(tokens, input);
+    ft_expand_var(tokens, shell);
+    current_token = tokens;
+    previous_token = NULL;
+    while (current_token)
+    {
+        if (validate_token(current_token, previous_token) == 1)
+        {
+            cleanup(NULL, input, tokens);
+            return (NULL);
+        }
+        previous_token = current_token;
+        current_token = current_token->next;
+    }
+    return (tokens);
 }
+
