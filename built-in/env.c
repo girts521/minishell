@@ -6,7 +6,7 @@
 /*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:27:33 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/06 18:23:37 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/22 17:23:52 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_env_help(char **args, t_env *env)
 		ft_putendl_fd("': No such file or directory", 2);
 		free(command);
 		ft_free_pointertopointer(envp);
-		return(127);
+		return (127);
 	}
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 15:35:26 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/07/23 17:55:12 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/22 17:23:33 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	ft_controll_token(char *arg)
 	return (1);
 }
 
-
 int	ft_envlst_size(t_env *env)
 {
 	int	len;
@@ -45,7 +44,7 @@ int	ft_envlst_size(t_env *env)
 void	ft_putstr_fd(char *s, int fd)
 {
 	if (!s)
-		return;
+		return ;
 	write(fd, s, ft_strlen(s));
 }
 
