@@ -80,25 +80,9 @@ void	execute_single_command(t_ast *root, t_shell *shell, int *status)
 	}
 	child = fork();
 	if (child == 0)
-	{
-		if (handle_redirs(root) == 1)
-		{
-			shell->last_exit_code = 1;
-			exit(1);
-		}
-		if (root->data.command_node.value)
-			execute_simple_command(root, shell);
-		else 
-			exit(0);
-	}
+		handle_child_in_single_command(root, shell);
 	else if (child > 0)
-	{
-		waitpid(child, status, 0);
-		if (WIFEXITED(*status))
-			shell->last_exit_code = WEXITSTATUS(*status);
-		else if (WIFSIGNALED(*status))
-			shell->last_exit_code = 128 + WTERMSIG(*status);
-	}
+		handle_parent_in_single_command(child, status, shell);
 	else
 		perror("Error forking a child!\n");
 	rl_on_new_line();

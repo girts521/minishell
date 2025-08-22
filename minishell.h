@@ -73,5 +73,7 @@ void	ft_expand_var(t_token *token, t_shell *shell);
 void	ft_print_env(t_env *env);
 int		ft_is_valid_env_char(int c);
 int		ft_exceve_use(t_shell *shell, char **args, char *command_node_value);
+void	handle_child_in_single_command(t_ast *root, t_shell *shell);
+void	handle_parent_in_single_command(int child, int *status, t_shell *shell);
 
 #endif
