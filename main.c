@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:31:41 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/22 18:10:16 by mmagrin          ###   ########.fr       */
+/*   Updated: 2025/08/22 18:50:16 by gikarcev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,22 @@
 
 volatile sig_atomic_t	g_signal_number = 0;
 
-void    parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
+void	parse_execute(char *input, t_shell *shell, struct sigaction *sa_quit)
 {
-    t_ast   *root;
-    t_token *tokens;
-    tokens = set_tokens(input, shell);
-    root = parser(tokens);
-    if (!root || !tokens)
-    {
-        cleanup(root, input, tokens);
-        return ;
-    }
-    execute_ast(root, shell, sa_quit);
-    add_history(input);
-    cleanup(root, input, tokens);
-    rl_on_new_line();
+	t_ast	*root;
+	t_token	*tokens;
+
+	tokens = set_tokens(input, shell);
+	root = parser(tokens);
+	if (!root || !tokens)
+	{
+		cleanup(root, input, tokens);
+		return ;
+	}
+	execute_ast(root, shell, sa_quit);
+	add_history(input);
+	cleanup(root, input, tokens);
+	rl_on_new_line();
 }
 
 int	handle_exit(char *input)
