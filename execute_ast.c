@@ -67,7 +67,7 @@ void	execute_single_command(t_ast *root, t_shell *shell, int *status)
 	int		builtin_code;
 	int		child;
 
-	if(root->data.command_node.value)
+	if (root->data.command_node.value)
 	{
 		args = root->data.command_node.args;
 		builtin_code = ft_is_builtin(args[0]);
