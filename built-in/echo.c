@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:13 by mmagrin           #+#    #+#             */
-/*   Updated: 2025/08/22 19:23:20 by gikarcev         ###   ########.fr       */
+/*   Updated: 2025/08/24 18:46:36 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,9 @@ void	ft_echo(char **args)
 	int	y;
 	int	no_nl;
 
-	if (!args[1])
-	{
-		ft_printf("\n");
-		return ;
-	}
 	no_nl = 0;
 	i = 1;
-	while (args[i][0] == '-')
+	while (args[i] && args[i][0] == '-')
 	{
 		y = 1;
 		while (args[i][y] == 'n')

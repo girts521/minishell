@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:25:23 by gikarcev          #+#    #+#             */
-/*   Updated: 2025/08/22 17:25:24 by gikarcev         ###   ########.fr       */
+/*   Updated: 2025/08/24 18:30:45 by mattiamagri      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,12 @@
 t_ast	*parser(t_token *tokens)
 {
 	t_ast	*current_node;
-	t_token	*previous_token;
-	t_token	*token_head;
 	t_ast	*root;
 
 	if (!tokens || tokens->type == TOKEN_EOF)
 		return (NULL);
 	current_node = create_ast_node();
 	root = current_node;
-	token_head = tokens;
-	previous_token = NULL;
 	while (tokens)
 	{
 		if (tokens->type == TOKEN_EOF)
@@ -35,7 +31,6 @@ t_ast	*parser(t_token *tokens)
 			tokens = handle_redirect(tokens, current_node);
 		if (tokens->type == TOKEN_PIPE)
 			current_node = handle_pipe(&root, current_node);
-		previous_token = tokens;
 		tokens = tokens->next;
 	}
 	return (root);
