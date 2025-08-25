@@ -7,7 +7,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 READLINE_INCLUDE = -I/opt/homebrew/opt/readline/include -I/usr/local/opt/readline/include
 READLINE_LIB = -L/opt/homebrew/opt/readline/lib -L/usr/local/opt/readline/lib
 
-CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser -Ibuilt-in $(READLINE_INCLUDE)
+CFLAGS = -Wall -Wextra -Werror -I. -I$(LIBFT_DIR) -Itokenizer -Ienviroment -Iast_parser -Ibuilt-in $(READLINE_INCLUDE) 
 LDFLAGS = $(READLINE_LIB) -L$(LIBFT_DIR) -lft -lreadline
 
 SRCS =	main.c ast_parser/ast_node_utils.c ast_parser/ast_utils.c ast_parser/parser_utils.c ast_parser/validate_tokens.c ast_parser/parser.c \

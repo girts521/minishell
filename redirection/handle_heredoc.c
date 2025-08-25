@@ -23,7 +23,6 @@ void	heredoc_cleanup(t_list **dest_cleanup)
 	{
 		next_node = current_node->next;
 		unlink((char *)current_node->content);
-		free((char *)current_node->content);
 		free(current_node);
 		current_node = next_node;
 	}
@@ -65,7 +64,7 @@ char	*execute_heredoc(t_ast *node, long redirc)
 
 	char_redir = ft_itoa(redirc);
 	dest = ft_strjoin("/tmp/minishell_heredoc_", char_redir);
-	temp_file = open(dest, O_WRONLY | O_RDONLY | O_APPEND | O_CREAT, 0644);
+	temp_file = open(dest, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (temp_file == -1)
 	{
 		free(dest);
