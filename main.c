@@ -50,7 +50,7 @@ int	check_quotes(char *input)
 
 	i = 0;
 	j = 0;
-	while (input[i++])
+	while (input[i])
 	{
 		search = input[i];
 		if (input[i] == 39 || input[i] == 34)
@@ -63,6 +63,7 @@ int	check_quotes(char *input)
 			else
 				return (1);
 		}
+		i++;
 	}
 	return (0);
 }

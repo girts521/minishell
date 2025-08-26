@@ -45,7 +45,7 @@ void	write_temp_file(t_ast *node, int temp_file, int redirc)
 			break ;
 		}
 		if (ft_strlen(line) == delimiter_len + 1 && \
-			ft_strncmp(line, delimiter, delimiter_len) == 0)
+ft_strncmp(line, delimiter, delimiter_len) == 0)
 		{
 			free(line);
 			break ;

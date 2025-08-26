@@ -32,9 +32,9 @@ void	malloc_redir(t_token *token, t_command_node *command_node)
 
 	redirs_num = count_redirs(token);
 	command_node->redirection = (t_redirection_type *)safe_calloc \
-					(1, redirs_num * sizeof(t_redirection_type *));
+(1, redirs_num * sizeof(t_redirection_type *));
 	command_node->redir_dest = (char **)safe_calloc \
-					(1, redirs_num * sizeof(char *));
+(1, redirs_num * sizeof(char *));
 }
 
 t_token	*handle_redirect(t_token *token, t_ast *current_node)
@@ -74,7 +74,7 @@ void	handle_command(t_token *token, t_ast *current_node)
 	{
 		command_node->value = token->value;
 		command_node->args = (char **)safe_calloc(count_args(token) \
-											+ 1, sizeof(char *));
++ 1, sizeof(char *));
 		command_node->argc = 0;
 	}
 	command_node->args[command_node->argc++] = token->value;
