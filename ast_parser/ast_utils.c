@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gikarcev <gikarcev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 17:25:07 by gikarcev          #+#    #+#             */
-/*   Updated: 2025/08/22 17:25:11 by gikarcev         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:29:23 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast_parser.h"
 
-//Creates a node with  empty values. 
-//Used COMMAND_NODE as default, should 
+//Creates a node with  empty values.
+//Used COMMAND_NODE as default, should
 //be overwritten later.
 t_ast	*create_ast_node(void)
 {

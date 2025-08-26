@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mattiamagrin <mattiamagrin@student.42.f    +#+  +:+       +#+        */
+/*   By: mmagrin <mmagrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:31:41 by mattiamagri       #+#    #+#             */
-/*   Updated: 2025/08/24 18:52:05 by mattiamagri      ###   ########.fr       */
+/*   Updated: 2025/08/26 14:40:26 by mmagrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,25 @@ int	handle_exit(char *input)
 	return (0);
 }
 
-int	check_quotes(char *input)
+int	check_quotes(char *s)
 {
 	int		i;
-	int		j;
-	char	search;
+	char	q;
 
 	i = 0;
-	j = 0;
-	while (input[i++])
+	while (s[i])
 	{
-		search = input[i];
-		if (input[i] == 39 || input[i] == 34)
+		if (s[i] == '\'' || s[i] == '\"')
 		{
-			j = i + 1;
-			while (input[j] && input[j] != search)
-				j++;
-			if (input[j] && input[j] == search)
-				i = j;
-			else
+			q = s[i];
+			i++;
+			while (s[i] && s[i] != q)
+				i++;
+			if (!s[i])
 				return (1);
 		}
+		if (s[i])
+			i++;
 	}
 	return (0);
 }
@@ -77,7 +75,6 @@ int	main_help(t_shell *shell, char *input, struct sigaction sa_quit)
 	{
 		validate_unclosedquotes();
 		rl_on_new_line();
-		free(input);
 		return (0);
 	}
 	parse_execute(input, shell, &sa_quit);
@@ -108,6 +105,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_free_env(shell->env);
 	free(shell);
 	clear_history();
+	cleanup(NULL, input, NULL);
 	return (1);
 }
 
